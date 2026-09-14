@@ -2,8 +2,6 @@
 
 MVNW := ./mvnw
 APP_NAME := cher
-SPRING_PROFILES := dev
-TEST_PROFILE := test
 DEV_DB := cher_development
 TEST_DB := cher_test
 
@@ -45,9 +43,9 @@ db-down: ## Drops the test and dev dbs locally
 	dropdb ${DEV_DB} 2>/dev/null || true
 	dropdb ${TEST_DB} 2>/dev/null || true
 
-migrate: ## Runs the migrations files against the db using flyway
-	$(MVNW) flyway:migrate -Dflyway.url=jdbc:postgresql://localhost:5432/${DEV_DB}
-	$(MVNW) flyway:migrate -Dflyway.url=jdbc:postgresql://localhost:5432/${TEST_DB}
+migrate: ## Runs the migration files against the db using flyway, reading credentials from .env and .env.test
+	set -a && . ./.env && set +a && $(MVNW) flyway:migrate -Dflyway.url=$$SPRING_FLYWAY_URL -Dflyway.user=$$SPRING_FLYWAY_USER -Dflyway.password=$$SPRING_FLYWAY_PASSWORD
+	set -a && . ./.env.test && set +a && $(MVNW) flyway:migrate -Dflyway.url=$$SPRING_FLYWAY_URL -Dflyway.user=$$SPRING_FLYWAY_USER -Dflyway.password=$$SPRING_FLYWAY_PASSWORD
 
 
 full-clean: db-down clean db-up migrate ## Drops the dbs, re-ups them, and runs migrations against them
