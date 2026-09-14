@@ -480,8 +480,23 @@
   .flex {
     display: flex;
   }
+  .min-h-dvh {
+    min-height: 100dvh;
+  }
+  .w-dvw {
+    width: 100dvw;
+  }
   .w-full {
     width: 100%;
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .shrink-0 {
+    flex-shrink: 0;
+  }
+  .flex-col {
+    flex-direction: column;
   }
   .flex-row {
     flex-direction: row;
@@ -489,8 +504,14 @@
   .justify-around {
     justify-content: space-around;
   }
+  .bg-base-100 {
+    background-color: var(--color-base-100);
+  }
   .bg-primary {
     background-color: var(--color-primary);
+  }
+  .bg-secondary {
+    background-color: var(--color-secondary);
   }
   .px-10 {
     padding-inline: calc(var(--spacing) * 10);
@@ -498,16 +519,18 @@
   .py-12 {
     padding-block: calc(var(--spacing) * 12);
   }
+  .text-center {
+    text-align: center;
+  }
   .text-3xl {
     font-size: var(--text-3xl);
     line-height: var(--tw-leading, var(--text-3xl--line-height));
   }
-  .text-4xl {
-    font-size: var(--text-4xl);
-    line-height: var(--tw-leading, var(--text-4xl--line-height));
-  }
   .text-primary-content {
     color: var(--color-primary-content);
+  }
+  .text-secondary-content {
+    color: var(--color-secondary-content);
   }
   @layer daisyui.l1.l2.l3 {
     .aura:has( > .btn,  > .input,  > .select) {

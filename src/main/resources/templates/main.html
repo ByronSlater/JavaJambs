@@ -6,16 +6,28 @@
     <title>Document</title>
     <link rel="stylesheet" th:href="@{/css/output.css}" />
   </head>
-  <body class="w-dvw h-dvh bg-base-100">
+  <body
+    class="w-dvw min-h-dvh bg-base-100 flex flex-col"
+    hx-boost="true"
+    hx-target="#main"
+    hx-select="#main"
+    hx-swap="outerHTML"
+  >
     <header
-      class="px-10 py-12 w-full bg-primary text-primary-content flex flex-row max-w justify-around"
+      class="shrink-0 px-10 py-4 w-full bg-primary text-primary-content flex flex-row max-w justify-around"
     >
-      <p class="text-3xl">Home</p>
-      <p class="text-3xl">About us</p>
-      <p class="text-3xl">Contact</p>
-      <p class="text-3xl">Login</p>
+      <p class="text-2xl">Home</p>
+      <p class="text-2xl">About us</p>
+      <p class="text-2xl">Contact</p>
+      <p class="text-2xl">Login</p>
     </header>
 
-    <footer></footer>
+    <div id="main" class="flex-1"></div>
+
+    <footer
+      class="shrink-0 text-base-content text-center px-10 py-4 w-full bg-base-100"
+    >
+      <p>We made this</p>
+    </footer>
   </body>
 </html>
