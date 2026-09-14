@@ -19,7 +19,7 @@ compile: ## Compile the application
 	$(MVNW) compile
 
 test: ## Run the test suite
-	$(MVNW) test
+	$(MVNW) test -Ddotenv.file=.env.test
 
 verify: ## Run tests and all verification checks
 	$(MVNW) verify
@@ -30,8 +30,12 @@ package: ## Build the application JAR
 install: ## Build and install the artifact locally
 	$(MVNW) install
 
-run: ## Run the application with Spring Boot
-	$(MVNW) spring-boot:run
+run: ## Run Spring Boot and watch Tailwind CSS
+	npx concurrently --kill-others \
+		-n "tailwind,spring" \
+		-c "cyan,green" \
+		"npm run watch:css" \
+		"${MVNW} spring-boot:run"
 
 db-up: ## Creates the test and dev dbs locally for the app
 	createdb ${DEV_DB} 2>/dev/null || true

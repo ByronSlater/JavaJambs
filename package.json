@@ -1,0 +1,27 @@
+{
+  "name": "javajambs",
+  "version": "1.0.0",
+  "description": "Final 2 week makers project",
+  "homepage": "https://github.com/ByronSlater/JavaJambs#readme",
+  "bugs": {
+    "url": "https://github.com/ByronSlater/JavaJambs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ByronSlater/JavaJambs.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css",
+    "watch:css": "mkdir -p ./target/classes/static/css && tailwindcss -i ./src/main/resources/static/css/input.css -o ./target/classes/static/css/output.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "concurrently": "^10.0.5",
+    "daisyui": "^5.7.37",
+    "tailwindcss": "^4.3.3"
+  }
+}

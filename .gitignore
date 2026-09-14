@@ -56,3 +56,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Node ###
+node_modules/
+
+### Environment ###
+.env
+.env.test
