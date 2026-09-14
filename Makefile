@@ -24,7 +24,7 @@ test: ## Run the test suite
 verify: ## Run tests and all verification checks
 	$(MVNW) verify
 
-package: ## Build the application JAR
+package: ## Build the application JAR with minified Tailwind CSS
 	$(MVNW) package
 
 install: ## Build and install the artifact locally
