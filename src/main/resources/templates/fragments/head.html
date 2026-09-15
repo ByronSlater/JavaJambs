@@ -1,0 +1,34 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FitForAll</title>
+  <link th:href="@{/css/output.css}" rel="stylesheet" type="text/css" />
+  <script th:src="@{/js/htmx.min.js}" defer></script>
+  <th:block th:fragment="theme-resolver">
+    <script th:inline="javascript">
+      ;(function () {
+        // 1. Get theme from Server-Side AuthenticationPrincipal (if logged in)
+        /*[# th:if="${#authentication != null and #authentication.principal != 'anonymousUser'}"]*/
+        const serverTheme = /*[[${#authentication.principal.theme}]]*/ null
+        /*[/]*/
+        /*[# th:if="${#authentication == null or #authentication.principal == 'anonymousUser'}"]*/
+        const serverTheme = null
+        /*[/]*/
+
+        // 2. Fallback to LocalStorage
+        const localTheme = localStorage.getItem('theme')
+
+        // 3. Fallback to default 'light'
+        const chosenTheme = serverTheme || localTheme || 'light'
+
+        // Apply the theme immediately to the <html> or <body> tag
+        document.documentElement.setAttribute('data-theme', chosenTheme)
+
+        // Sync back to localStorage if the server provided a theme or if it wasn't set yet
+        if (chosenTheme) {
+          localStorage.setItem('theme', chosenTheme)
+        }
+      })()
+    </script>
+  </th:block>
+</head>

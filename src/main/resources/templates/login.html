@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Log in</title>
-    <link rel="stylesheet" th:href="@{/css/themes.css}" />
-    <link rel="stylesheet" th:href="@{/css/output.css}" />
-    <script th:src="@{/js/htmx.min.js}" defer></script>
-  </head>
+  <head th:replace="~{fragments/head.html}"></head>
 
   <body
     class="min-h-screen"
@@ -16,11 +9,10 @@
     hx-select="#main"
     hx-swap="outerHTML"
     th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
-    data-theme="fit-for-all-dark"
   >
     <div id="main" class="bg-base-100 min-h-screen flex flex-col">
       <!-- Header -->
-      <header th:replace="fragments/anon-header.html"></header>
+      <header th:replace="~{fragments/anon-header.html}"></header>
 
       <!-- Body -->
       <div class="grid md:grid-cols-2 flex-1">
