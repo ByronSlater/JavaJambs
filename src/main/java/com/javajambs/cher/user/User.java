@@ -34,8 +34,12 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String email;
+
     private String profile_picture;
+
+    @Column(nullable = true)
     private String bio;
 
     private Instant createdAt;

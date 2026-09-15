@@ -22,7 +22,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + username));
     }
 
-    public User registerUser(String username, String rawPassword) {
+    public User registerUser(String username, String rawPassword, String email) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new UsernameAlreadyExistsException(username);
         }
@@ -30,6 +30,7 @@ public class UserService implements UserDetailsService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setEmail(email);
         return userRepository.save(user);
     }
 }
