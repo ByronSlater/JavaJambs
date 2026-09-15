@@ -12,6 +12,7 @@
     hx-target="#main"
     hx-select="#main"
     hx-swap="outerHTML"
+    th:hx-headers="|{'${_csrf.headerName}': '${_csrf.token}'}|"
   >
     <header
       class="shrink-0 px-10 py-4 w-full bg-primary text-primary-content flex flex-row max-w justify-around"
