@@ -16,7 +16,7 @@
     hx-target="#main"
     hx-select="#main"
     hx-swap="outerHTML"
-    th:hx-headers="|{'${_csrf.headerName}': '${_csrf.token}'}|"
+    th:hx-headers="|{&quot;${_csrf.headerName}&quot;: &quot;${_csrf.token}&quot;}|"
 >
 
 <div id="main" data-theme="fit-for-all-dark" class="bg-base-100 min-h-screen flex flex-col">
@@ -56,9 +56,6 @@
                     <h1 class="text-3xl font-bold text-base-content">Create Your Account</h1>
                 </div>
                 <form th:action="@{/register}" th:object="${registerForm}" method="post" class="flex flex-col gap-4">
-
-                    <!-- CSRF token - Spring Security not on class path -->
-                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                     <div th:if="${#fields.hasGlobalErrors()}" role="alert" class="alert alert-error text-sm">
                         <span th:each="err : ${#fields.globalErrors()}" th:text="${err}">Something went wrong.</span>
