@@ -14,7 +14,7 @@
     hx-target="#main"
     hx-select="#main"
     hx-swap="outerHTML"
-    th:hx-headers="|{'${_csrf.headerName}': '${_csrf.token}'}|"
+    th:hx-headers="|{&quot;${_csrf.headerName}&quot;: &quot;${_csrf.token}&quot;}|"
   >
     <div
       id="main"
@@ -71,14 +71,6 @@
               method="post"
               class="flex flex-col gap-4"
             >
-              <!-- CSRF token - Spring Security not on class path -->
-              <input
-                type="hidden"
-                th:if="${_csrf}"
-                th:name="${_csrf.parameterName}"
-                th:value="${_csrf.token}"
-              />
-
               <div
                 th:if="${loginError}"
                 role="alert"
