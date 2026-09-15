@@ -17,6 +17,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll())
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .failureUrl("/login?error")
                         .defaultSuccessUrl("/dashboard", true)
                         .permitAll())
                 .logout(logout -> logout
