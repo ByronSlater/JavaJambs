@@ -55,7 +55,7 @@
                 <div>
                     <h1 class="text-3xl font-bold text-base-content">Create Your Account</h1>
                 </div>
-                <form th:action="@{/register}" th:object="${registerForm}" method="post" class="flex flex-col gap-4">
+                <form th:action="@{/register}" th:object="${registerForm}" method="post" novalidate class="flex flex-col gap-4">
 
                     <div th:if="${#fields.hasGlobalErrors()}" role="alert" class="alert alert-error text-sm">
                         <span th:each="err : ${#fields.globalErrors()}" th:text="${err}">Something went wrong.</span>
