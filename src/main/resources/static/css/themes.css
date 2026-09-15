@@ -3,8 +3,12 @@
    Link this file on every page (after the daisyUI CDN stylesheet) instead
    of copy-pasting the theme blocks into each page's <style>. */
 
-[data-theme="fit-for-all-light"] {
+@plugin "daisyui/theme" {
+    name: "fit-for-all-light";
+    default: true;
+    prefersdark: false;
     color-scheme: light;
+
     --color-base-100: oklch(98.2% 0.006 128.5);
     --color-base-200: oklch(95.2% 0.006 128.5);
     --color-base-300: oklch(90.2% 0.006 128.5);
@@ -35,8 +39,12 @@
     --noise: 0;
 }
 
-[data-theme="fit-for-all-dark"] {
+@plugin "daisyui/theme" {
+    name: "fit-for-all-dark";
+    default: false;
+    prefersdark: true;
     color-scheme: dark;
+
     --color-base-100: oklch(23.3% 0.016 160.5);
     --color-base-200: oklch(26.3% 0.016 160.5);
     --color-base-300: oklch(33.3% 0.016 160.5);

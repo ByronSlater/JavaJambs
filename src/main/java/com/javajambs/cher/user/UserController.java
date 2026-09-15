@@ -1,8 +1,12 @@
 package com.javajambs.cher.user;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.javajambs.cher.auth.LoginRequest;
@@ -10,6 +14,12 @@ import com.javajambs.cher.auth.RegisterRequest;
 
 @Controller
 public class UserController {
+    private final UserRepository userRepository;
+
+    UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @GetMapping("/login")
     public String loginPage(@RequestParam(required = false) String error, Model model) {
         model.addAttribute("loginForm", new LoginRequest("", ""));
@@ -23,5 +33,14 @@ public class UserController {
     public String registerPage(Model model) {
         model.addAttribute("registerForm", new RegisterRequest("", "", ""));
         return "register";
+    }
+
+    @PostMapping("/theme/{themeName}")
+    public ResponseEntity<Void> setTheme(
+            @AuthenticationPrincipal User user,
+            @PathVariable String themeName) {
+        user.setTheme(themeName);
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
     }
 }
