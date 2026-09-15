@@ -66,3 +66,6 @@ node_modules/
 
 ### Generated CSS ###
 src/main/resources/static/css/output.css
+
+### Vendored JS ###
+src/main/resources/static/js/htmx.min.js

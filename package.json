@@ -16,6 +16,7 @@
   "scripts": {
     "build:css": "tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css",
     "watch:css": "mkdir -p ./target/classes/static/css && tailwindcss -i ./src/main/resources/static/css/input.css -o ./target/classes/static/css/output.css --watch",
+    "build:js": "mkdir -p ./src/main/resources/static/js && cp ./node_modules/htmx.org/dist/htmx.min.js ./src/main/resources/static/js/htmx.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -23,5 +24,8 @@
     "concurrently": "^10.0.5",
     "daisyui": "^5.7.37",
     "tailwindcss": "^4.3.3"
+  },
+  "dependencies": {
+    "htmx.org": "^2.0.10"
   }
 }
