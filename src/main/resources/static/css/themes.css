@@ -5,25 +5,25 @@
 
 [data-theme="fit-for-all-light"] {
     color-scheme: light;
-    --color-base-100: #F8FAF6;
-    --color-base-200: #F8FAF6;
-    --color-base-300: #F8FAF6;
-    --color-base-content: #17201B;
-    --color-primary: #426B3A;
+    --color-base-100: #F9FAF7;
+    --color-base-200: #F3F4EF;
+    --color-base-300: #E9EAE3;
+    --color-base-content: #1C2620;
+    --color-primary: #35592E;
     --color-primary-content: #FFFFFF;
-    --color-secondary: #A94F2F;
+    --color-secondary: #863F22;
     --color-secondary-content: #FFFFFF;
-    --color-accent: #68517E;
+    --color-accent: #55416B;
     --color-accent-content: #FFFFFF;
-    --color-neutral: #17201B;
+    --color-neutral: #1C2620;
     --color-neutral-content: #FFFFFF;
-    --color-info: #005FCC;
+    --color-info: #00479C;
     --color-info-content: #FFFFFF;
-    --color-success: #276738;
+    --color-success: #1F5730;
     --color-success-content: #FFFFFF;
-    --color-warning: #8A5A00;
+    --color-warning: #6B4400;
     --color-warning-content: #FFFFFF;
-    --color-error: #B3261E;
+    --color-error: #96201A;
     --color-error-content: #FFFFFF;
     --radius-selector: 0.5rem;
     --radius-field: 0.25rem;
@@ -33,13 +33,19 @@
     --border: 1px;
     --depth: 1;
     --noise: 0;
+
+    /* Fixed light backdrop for the logo — always light regardless of
+       theme, since the logo artwork (dark linework + text) needs a
+       light canvas behind it to stay readable. Use this specifically
+       on the logo's wrapper, not on general UI surfaces. */
+    --color-logo-bg: #F9FAF7;
 }
 
 [data-theme="fit-for-all-dark"] {
     color-scheme: dark;
     --color-base-100: #17201B;
-    --color-base-200: #17201B;
-    --color-base-300: #17201B;
+    --color-base-200: #1D2822;
+    --color-base-300: #26332B;
     --color-base-content: oklch(97.807% 0.029 256.847);
     --color-primary: #A8D89A;
     --color-primary-content: #17201B;
@@ -65,4 +71,9 @@
     --border: 1px;
     --depth: 1;
     --noise: 0;
+
+    /* Same fixed light backdrop as the light theme — the logo needs
+       this even in dark mode, since its dark linework/text would
+       vanish against the dark base colors otherwise. */
+    --color-logo-bg: #F9FAF7;
 }
