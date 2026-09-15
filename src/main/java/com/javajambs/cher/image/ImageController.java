@@ -44,7 +44,9 @@ public class ImageController {
         String contentType = Files.probeContentType(resource.getFile().toPath());
 
         return ResponseEntity.ok()
-                .contentType(contentType != null ? MediaType.parseMediaType(contentType) : MediaType.APPLICATION_OCTET_STREAM)
+                .contentType(contentType != null
+                        ? MediaType.parseMediaType(contentType)
+                        : MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }
 }
