@@ -34,7 +34,9 @@ Create the dev db, it'll be owned by your current user
 ```bash
 createdb cher_development
 ```
+
 or
+
 ```bash
 make db-up
 ```

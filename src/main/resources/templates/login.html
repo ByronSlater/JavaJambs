@@ -14,7 +14,7 @@
     hx-target="#main"
     hx-select="#main"
     hx-swap="outerHTML"
-    th:hx-headers="|{&quot;${_csrf.headerName}&quot;: &quot;${_csrf.token}&quot;}|"
+    th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
   >
     <div
       id="main"
@@ -29,7 +29,7 @@
           <img th:src="@{/images/logo.png}" alt="Logo" class="h-44 w-44" />
         </a>
         <a
-          href="#"
+          th:href="@{/dashboard}"
           class="btn btn-outline btn-sm border-base-content/40 text-base-content hover:bg-base-content hover:text-base-100"
         >
           Back to Site
