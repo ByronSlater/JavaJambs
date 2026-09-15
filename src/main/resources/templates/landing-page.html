@@ -6,6 +6,7 @@
     <title>FitForAll</title>
     <link th:href="@{/css/output.css}" rel="stylesheet" type="text/css" />
     <script th:src="@{/js/htmx.min.js}" defer></script>
+    <div th:replace="~{fragments/header :: head-assets}"></div>
   </head>
 
   <body
@@ -22,27 +23,7 @@
       class="bg-base-100 min-h-screen flex flex-col"
     >
       <!-- Header -->
-      <header
-        class="flex items-center justify-between px-6 md:px-10 py-4 border-b border-base-300"
-      >
-        <a href="/" class="flex items-center gap-2">
-          <img th:src="@{/images/logo.png}" alt="Logo" class="h-44 w-44" />
-        </a>
-
-        <span class="text-base-content/60 text-sm hidden sm:inline">
-          Hello, Guest
-        </span>
-
-        <div class="flex items-center gap-3">
-          <a
-            th:href="@{/register}"
-            class="btn btn-outline btn-sm border-base-content/40 text-base-content hover:bg-base-content hover:text-base-100"
-          >
-            Register
-          </a>
-          <a th:href="@{/login}" class="btn btn-neutral btn-sm"> Log in </a>
-        </div>
-      </header>
+      <div th:replace="~{fragments/header :: guest-header}"></div>
 
       <!-- Body -->
       <main
