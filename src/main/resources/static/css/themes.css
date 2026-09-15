@@ -5,9 +5,9 @@
 
 [data-theme="fit-for-all-light"] {
     color-scheme: light;
-    --color-base-100: #F8FAF6;
-    --color-base-200: #F8FAF6;
-    --color-base-300: #F8FAF6;
+    --color-base-100: oklch(98.2% 0.006 128.5);
+    --color-base-200: oklch(95.2% 0.006 128.5);
+    --color-base-300: oklch(90.2% 0.006 128.5);
     --color-base-content: #17201B;
     --color-primary: #426B3A;
     --color-primary-content: #FFFFFF;
@@ -37,9 +37,9 @@
 
 [data-theme="fit-for-all-dark"] {
     color-scheme: dark;
-    --color-base-100: #17201B;
-    --color-base-200: #17201B;
-    --color-base-300: #17201B;
+    --color-base-100: oklch(23.3% 0.016 160.5);
+    --color-base-200: oklch(26.3% 0.016 160.5);
+    --color-base-300: oklch(33.3% 0.016 160.5);
     --color-base-content: oklch(97.807% 0.029 256.847);
     --color-primary: #A8D89A;
     --color-primary-content: #17201B;

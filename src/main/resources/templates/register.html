@@ -16,26 +16,11 @@
     hx-select="#main"
     hx-swap="outerHTML"
     th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
+    data-theme="fit-for-all-dark"
   >
-    <div
-      id="main"
-      data-theme="fit-for-all-dark"
-      class="bg-base-100 min-h-screen flex flex-col"
-    >
+    <div id="main" class="bg-base-100 min-h-screen flex flex-col">
       <!-- Header -->
-      <header
-        class="flex items-center justify-between px-6 md:px-10 py-4 border-b border-base-300"
-      >
-        <a href="/" class="flex items-center gap-2">
-          <img th:src="@{/images/logo.png}" alt="Logo" class="h-44 w-44" />
-        </a>
-        <a
-          th:href="@{/dashboard}"
-          class="btn btn-outline btn-sm border-base-content/40 text-base-content hover:bg-base-content hover:text-base-100"
-        >
-          Back to Site
-        </a>
-      </header>
+      <header th:replace="fragments/anon-header.html"></header>
 
       <!-- Body -->
       <div class="grid md:grid-cols-2 flex-1">
@@ -59,7 +44,7 @@
         </div>
 
         <!-- Right: registration form, switches to the light them -->
-        <div data-theme="fit-for-all-light" class="bg-base-100">
+        <div class="bg-base-100">
           <div
             class="h-full flex flex-col justify-center px-8 py-12 md:px-14 max-w-md mx-auto w-full gap-5"
           >
