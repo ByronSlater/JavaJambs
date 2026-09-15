@@ -1,12 +1,15 @@
 package com.javajambs.cher.auth;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.javajambs.cher.user.UserService;
 import com.javajambs.cher.user.UsernameAlreadyExistsException;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class AuthController {
@@ -18,14 +21,17 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String username, @RequestParam String password,
-            RedirectAttributes redirectAttributes) {
+    public String register(@Valid @ModelAttribute("registerRequest") RegisterRequest request,
+            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+
         try {
-            userService.registerUser(username, password);
+            userService.registerUser(request.username(), request.password(), request.email());
         } catch (UsernameAlreadyExistsException e) {
-            redirectAttributes.addFlashAttribute("error", "That username is already taken");
-            redirectAttributes.addFlashAttribute("username", username);
-            return "redirect:/register";
+            bindingResult.rejectValue("username", "username.exists", "That username is already taken");
+            return "register";
         }
 
         redirectAttributes.addFlashAttribute("registered", true);
