@@ -1,0 +1,68 @@
+/* themes.css
+   Shared daisyUI theme definitions — fit-for-all-light / fit-for-all-dark.
+   Link this file on every page (after the daisyUI CDN stylesheet) instead
+   of copy-pasting the theme blocks into each page's <style>. */
+
+[data-theme="fit-for-all-light"] {
+    color-scheme: light;
+    --color-base-100: #F8FAF6;
+    --color-base-200: #F8FAF6;
+    --color-base-300: #F8FAF6;
+    --color-base-content: #17201B;
+    --color-primary: #426B3A;
+    --color-primary-content: #FFFFFF;
+    --color-secondary: #A94F2F;
+    --color-secondary-content: #FFFFFF;
+    --color-accent: #68517E;
+    --color-accent-content: #FFFFFF;
+    --color-neutral: #17201B;
+    --color-neutral-content: #FFFFFF;
+    --color-info: #005FCC;
+    --color-info-content: #FFFFFF;
+    --color-success: #276738;
+    --color-success-content: #FFFFFF;
+    --color-warning: #8A5A00;
+    --color-warning-content: #FFFFFF;
+    --color-error: #B3261E;
+    --color-error-content: #FFFFFF;
+    --radius-selector: 0.5rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0.5rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 1;
+    --noise: 0;
+}
+
+[data-theme="fit-for-all-dark"] {
+    color-scheme: dark;
+    --color-base-100: #17201B;
+    --color-base-200: #17201B;
+    --color-base-300: #17201B;
+    --color-base-content: oklch(97.807% 0.029 256.847);
+    --color-primary: #A8D89A;
+    --color-primary-content: #17201B;
+    --color-secondary: #F0A083;
+    --color-secondary-content: #17201B;
+    --color-accent: #C8B4DF;
+    --color-accent-content: #17201B;
+    --color-neutral: #222D26;
+    --color-neutral-content: oklch(98% 0 0);
+    --color-info: #79B8FF;
+    --color-info-content: #17201B;
+    --color-success: #8FD39B;
+    --color-success-content: #17201B;
+    --color-warning: #FFD166;
+    --color-warning-content: #17201B;
+    --color-error: #FFB4AB;
+    --color-error-content: #17201B;
+    --radius-selector: 0.5rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0.5rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 1;
+    --noise: 0;
+}
