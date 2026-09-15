@@ -1,0 +1,56 @@
+package com.javajambs.cher.user;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.thymeleaf.autoconfigure.ThymeleafAutoConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.ViewResolver;
+
+/**
+ * Thymeleaf is excluded: no "login"/"register" templates exist yet (no
+ * frontend has been built), so real rendering would fail. A no-op
+ * ViewResolver stands in for it instead of relying on Spring MVC's default
+ * fallback resolver, which would forward e.g. "login" back to "/login" and
+ * trip a circular-view-path error. This is enough to assert routing
+ * behavior without a real template.
+ */
+@WebMvcTest(controllers = UserController.class, excludeAutoConfiguration = ThymeleafAutoConfiguration.class)
+@AutoConfigureMockMvc(addFilters = false)
+@Import(UserControllerTest.NoOpViewResolverConfig.class)
+class UserControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @TestConfiguration
+    static class NoOpViewResolverConfig {
+        @Bean
+        ViewResolver viewResolver() {
+            return (viewName, locale) -> (model, request, response) -> {
+            };
+        }
+    }
+
+    @Test
+    void loginPage_returnsLoginView() throws Exception {
+        mockMvc.perform(get("/login"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("login"));
+    }
+
+    @Test
+    void registerPage_returnsRegisterView() throws Exception {
+        mockMvc.perform(get("/register"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("register"));
+    }
+}
