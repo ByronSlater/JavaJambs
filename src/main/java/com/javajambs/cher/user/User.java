@@ -1,5 +1,6 @@
 package com.javajambs.cher.user;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +33,17 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String password;
+
+    private String email;
+    private String profile_picture;
+    private String bio;
+
+    private Instant createdAt;
+
+    @PrePersist
+    public void beforeCreate() {
+        this.createdAt = Instant.now();
+    }
 
     /**
      * Boilerplate for if we implement role-based auth, currently
