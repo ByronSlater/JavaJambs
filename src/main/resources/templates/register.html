@@ -49,6 +49,7 @@
               th:object="${registerForm}"
               method="post"
               class="flex flex-col gap-4"
+              novalidate
             >
               <div
                 th:if="${#fields.hasGlobalErrors()}"
