@@ -178,7 +178,7 @@
 					</execution>
 					<execution>
 						<id>build-htmx-js</id>
-						<phase>prepare-package</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
