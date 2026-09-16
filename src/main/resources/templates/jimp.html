@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragments/head.html :: head('Jimp Editor Spike')}"></head>
+
+  <body
+    class="min-h-screen"
+    hx-boost="true"
+    hx-target="#main"
+    hx-select="#main"
+    hx-swap="outerHTML"
+    th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
+    th:data-csrf-header="${_csrf.headerName}"
+    th:data-csrf-token="${_csrf.token}"
+  >
+    <div
+      id="main"
+      data-theme="fit-for-all-light"
+      class="min-h-screen bg-base-100 text-base-content"
+    >
+      <header th:replace="~{fragments/header.html :: header}"></header>
+
+      <main class="flex justify-center px-6 py-12 md:py-16">
+        <div class="w-full max-w-4xl">
+          <div class="mb-8">
+            <p class="text-sm text-base-content/50">Spike / mockup</p>
+
+            <h1 class="text-3xl md:text-4xl font-bold">
+              Jimp Background Remover
+            </h1>
+
+            <p class="mt-2 text-base-content/60">
+              Not wired into the wardrobe flow yet - this page just proves out
+              whether
+              <a
+                href="https://www.npmjs.com/package/jimp"
+                target="_blank"
+                rel="noopener"
+                class="link"
+                >Jimp</a
+              >
+              can power an in-browser magic wand for isolating a clothing item
+              from its background. Upload a photo, then click a region to erase
+              everything within it that's a similar colour.
+            </p>
+          </div>
+
+          <div class="card bg-base-100 border border-base-300 shadow-sm">
+            <div class="card-body gap-6">
+              <div class="flex flex-wrap items-end gap-4">
+                <div>
+                  <label class="label" for="jimp-file">
+                    <span class="label-text">Photo</span>
+                  </label>
+                  <input
+                    id="jimp-file"
+                    type="file"
+                    accept="image/*"
+                    data-jimp-file
+                    class="file-input file-input-bordered w-full max-w-xs"
+                  />
+                </div>
+
+                <div>
+                  <label class="label" for="jimp-tolerance">
+                    <span class="label-text">
+                      Tolerance
+                      <span data-jimp-tolerance-value>20</span>
+                    </span>
+                  </label>
+                  <input
+                    id="jimp-tolerance"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="20"
+                    data-jimp-tolerance
+                    class="range range-primary w-48"
+                  />
+                </div>
+
+                <div class="flex gap-2 ml-auto">
+                  <button
+                    type="button"
+                    data-jimp-undo
+                    disabled
+                    class="btn btn-ghost btn-sm"
+                  >
+                    Undo
+                  </button>
+                  <button
+                    type="button"
+                    data-jimp-reset
+                    disabled
+                    class="btn btn-ghost btn-sm"
+                  >
+                    Reset
+                  </button>
+                  <button
+                    type="button"
+                    data-jimp-download
+                    disabled
+                    class="btn btn-outline btn-sm"
+                  >
+                    Download
+                  </button>
+                  <button
+                    type="button"
+                    data-jimp-save
+                    disabled
+                    class="btn btn-primary btn-sm"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="rounded-lg border border-base-300 p-4 overflow-auto flex justify-center"
+                style="
+                  background-image: linear-gradient(
+                      45deg,
+                      #cbd5e1 25%,
+                      transparent 25%
+                    ),
+                    linear-gradient(-45deg, #cbd5e1 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, #cbd5e1 75%),
+                    linear-gradient(-45deg, transparent 75%, #cbd5e1 75%);
+                  background-size: 20px 20px;
+                  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+                "
+              >
+                <canvas
+                  data-jimp-canvas
+                  class="max-w-full cursor-crosshair"
+                ></canvas>
+              </div>
+
+              <p data-jimp-status class="text-sm text-base-content/60">
+                Upload a photo to get started.
+              </p>
+
+              <div>
+                <p
+                  class="text-xs uppercase tracking-wide text-base-content/50 mb-2"
+                >
+                  Last saved (via existing /img/upload endpoint)
+                </p>
+                <div data-jimp-saved-result></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      import { init } from '/js/jimp-editor.js'
+
+      init(document.body)
+    </script>
+  </body>
+</html>
