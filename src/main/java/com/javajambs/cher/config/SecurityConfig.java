@@ -23,25 +23,29 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .failureUrl("/login?error")
-                        .successHandler((request, response, authentication) -> hxAwareRedirect(request, response, "/dashboard"))
+                        .successHandler(
+                                (request, response, authentication) -> hxAwareRedirect(request, response, "/dashboard"))
+                        .defaultSuccessUrl("/profile", true)
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessHandler((request, response, authentication) -> hxAwareRedirect(request, response, "/dashboard"))
+                        .logoutSuccessHandler(
+                                (request, response, authentication) -> hxAwareRedirect(request, response, "/dashboard"))
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll())
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) ->
-                                hxAwareRedirect(request, response, "/login")));
+                        .authenticationEntryPoint(
+                                (request, response, authException) -> hxAwareRedirect(request, response, "/login")));
 
         return http.build();
     }
 
     /**
      * Redirects via a full page navigation rather than an htmx-boosted AJAX swap.
-     * Login/logout rotate the CSRF token, but hx-boost only swaps #main, leaving the
+     * Login/logout rotate the CSRF token, but hx-boost only swaps #main, leaving
+     * the
      * stale token baked into the &lt;body&gt; hx-headers attribute - forcing a real
      * navigation here re-renders body with a fresh token.
      */
