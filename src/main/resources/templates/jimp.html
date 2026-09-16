@@ -12,11 +12,7 @@
     th:data-csrf-header="${_csrf.headerName}"
     th:data-csrf-token="${_csrf.token}"
   >
-    <div
-      id="main"
-      data-theme="fit-for-all-light"
-      class="min-h-screen bg-base-100 text-base-content"
-    >
+    <div id="main" class="min-h-screen bg-base-100 text-base-content">
       <header th:replace="~{fragments/header.html :: header}"></header>
 
       <main class="flex justify-center px-6 py-12 md:py-16">
@@ -61,6 +57,30 @@
                 </div>
 
                 <div>
+                  <span class="label"
+                    ><span class="label-text">Tool</span></span
+                  >
+                  <div class="join">
+                    <button
+                      type="button"
+                      data-jimp-tool="wand"
+                      aria-pressed="true"
+                      class="btn btn-sm join-item"
+                    >
+                      Magic Wand
+                    </button>
+                    <button
+                      type="button"
+                      data-jimp-tool="brush"
+                      aria-pressed="false"
+                      class="btn btn-sm join-item"
+                    >
+                      Brush
+                    </button>
+                  </div>
+                </div>
+
+                <div data-jimp-wand-controls>
                   <label class="label" for="jimp-tolerance">
                     <span class="label-text">
                       Tolerance
@@ -74,6 +94,24 @@
                     max="100"
                     value="20"
                     data-jimp-tolerance
+                    class="range range-primary w-48"
+                  />
+                </div>
+
+                <div data-jimp-brush-controls class="hidden">
+                  <label class="label" for="jimp-brush-size">
+                    <span class="label-text">
+                      Brush size
+                      <span data-jimp-brush-size-value>24</span>px
+                    </span>
+                  </label>
+                  <input
+                    id="jimp-brush-size"
+                    type="range"
+                    min="4"
+                    max="120"
+                    value="24"
+                    data-jimp-brush-size
                     class="range range-primary w-48"
                   />
                 </div>
@@ -129,10 +167,16 @@
                   background-position: 0 0, 0 10px, 10px -10px, -10px 0;
                 "
               >
-                <canvas
-                  data-jimp-canvas
-                  class="max-w-full cursor-crosshair"
-                ></canvas>
+                <div class="relative inline-block leading-none">
+                  <canvas
+                    data-jimp-canvas
+                    class="max-w-full cursor-crosshair"
+                  ></canvas>
+                  <div
+                    data-jimp-brush-cursor
+                    class="hidden pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-primary/10"
+                  ></div>
+                </div>
               </div>
 
               <p data-jimp-status class="text-sm text-base-content/60">

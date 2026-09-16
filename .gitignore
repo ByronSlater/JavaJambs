@@ -73,3 +73,6 @@ src/main/resources/static/js/htmx.min.js
 ### Generated JS (bundled by esbuild) ###
 src/main/resources/static/js/jimp-editor.js
 src/main/resources/static/js/jimp-editor.js.map
+
+## JIMP instance files
+instance/uploads/jimp-mockup/
