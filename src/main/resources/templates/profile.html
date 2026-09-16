@@ -8,13 +8,9 @@
     hx-target="#main"
     hx-select="#main"
     hx-swap="outerHTML"
-    th:hx-headers="|{'${_csrf.headerName}': '${_csrf.token}'}|"
+    th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
   >
-    <div
-      id="main"
-      data-theme="fit-for-all-dark"
-      class="min-h-screen bg-base-100 text-base-content"
-    >
+    <div id="main" class="min-h-screen bg-base-100 text-base-content">
       <!-- Header -->
       <header th:replace="~{fragments/header.html :: header}"></header>
 
