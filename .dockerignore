@@ -1,0 +1,9 @@
+.git
+.vscode
+.env
+.env.test
+.env.example
+.env.test.example
+target
+node_modules
+*.md
