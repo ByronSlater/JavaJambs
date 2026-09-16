@@ -2,15 +2,15 @@
   <!-- sidebar -->
   <nav
     aria-label="Primary"
-    class="hidden md:flex md:flex-col md:w-24 md:shrink-0 items-center gap-10 py-10 bg-neutral text-neutral-content"
+    class="hidden md:flex md:flex-col md:w-18 md:shrink-0 h-full items-center gap-5 py-10 bg-neutral text-neutral-content overflow-y-auto"
   >
     <a
-      th:href="@{/Home}"
+      th:href="@{/home}"
       aria-current="page"
       class="flex flex-col items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-box p-1"
     >
       <span
-        class="flex items-center justify-center w-14 h-14 rounded-full border-2 border-neutral-content/70 hover:bg-neutral-content/10 transition-colors"
+        class="flex items-center justify-center size-9 rounded-full border-2 border-neutral-content/70 hover:bg-neutral-content/10 transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +37,7 @@
       class="flex flex-col items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-box p-1"
     >
       <span
-        class="flex items-center justify-center w-14 h-14 rounded-full border-2 border-neutral-content/70 hover:bg-neutral-content/10 transition-colors"
+        class="flex items-center justify-center size-9 rounded-full border-2 border-neutral-content/70 hover:bg-neutral-content/10 transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +64,7 @@
       class="flex flex-col items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-box p-1"
     >
       <span
-        class="flex items-center justify-center w-14 h-14 rounded-full border-2 border-neutral-content/70 hover:bg-neutral-content/10 transition-colors"
+        class="flex items-center justify-center size-9 rounded-full border-2 border-neutral-content/70 hover:bg-neutral-content/10 transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@
       class="flex flex-col items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-box p-1"
     >
       <span
-        class="flex items-center justify-center w-14 h-14 rounded-full border-2 border-neutral-content/70 hover:bg-neutral-content/10 transition-colors"
+        class="flex items-center justify-center size-9 rounded-full border-2 border-neutral-content/70 hover:bg-neutral-content/10 transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -127,11 +127,14 @@
     <a
       href="#"
       aria-label="Add"
-      class="flex items-center justify-center w-16 h-16 rounded-full bg-neutral-content text-neutral shadow-md hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      class="flex items-center justify-center size-9 rounded-full bg-neutral-content text-neutral shadow-md hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     >
-      <span class="text-3xl font-semibold leading-none" aria-hidden="true"
-        >+</span
+      <span
+        class="text-3xl font-semibold leading-none grid place-items-center"
+        aria-hidden="true"
       >
+        <p>+</p>
+      </span>
     </a>
   </nav>
 
@@ -141,7 +144,7 @@
       class="relative flex items-center justify-around gap-2 px-6 py-3 rounded-full bg-neutral text-neutral-content shadow-lg"
     >
       <a
-        th:href="@{/Home}"
+        th:href="@{/home}"
         aria-current="page"
         class="flex flex-col items-center gap-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-box p-1"
       >
@@ -249,8 +252,11 @@
         aria-label="Add"
         class="absolute left-1/2 -translate-x-1/2 -top-6 flex items-center justify-center w-14 h-14 rounded-full bg-neutral-content text-neutral shadow-md border-4 border-neutral focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       >
-        <span class="text-2xl font-semibold leading-none" aria-hidden="true">
-          +
+        <span
+          class="text-2xl font-semibold leading-none grid place-items-center"
+          aria-hidden="true"
+        >
+          <p>+</p>
         </span>
       </a>
     </div>

@@ -18,38 +18,20 @@
       th:href="@{/dashboard}"
       class="flex items-center gap-3"
     >
-      <div
-        style="background-color: var(--color-logo-bg)"
-        class="rounded-box p-2"
-      >
+      <div class="rounded-box p-2">
         <img
-          th:src="@{/images/logo-icon.png}"
+          th:src="@{/images/new-logo-icon.png}"
           alt=""
           class="h-16 w-auto object-contain"
         />
       </div>
 
       <!-- sm–lg: wordmark only -->
-      <div
-        style="background-color: var(--color-logo-bg)"
-        class="hidden sm:flex lg:hidden rounded-box px-2 py-1"
-      >
+      <div class="hidden sm:flex rounded-box px-2 py-1">
         <img
-          th:src="@{/images/logo-text-only.png}"
+          th:src="@{/images/new-logo-text-only.png}"
           alt="FitForAll"
           class="h-8 w-auto object-contain"
-        />
-      </div>
-
-      <!-- lg and up: wordmark + tagline -->
-      <div
-        style="background-color: var(--color-logo-bg)"
-        class="hidden lg:flex rounded-box px-3 py-2"
-      >
-        <img
-          th:src="@{/images/logo-text-with-tagline.png}"
-          alt="FitForAll — Functional | Fashionable"
-          class="h-12 w-auto object-contain"
         />
       </div>
     </a>

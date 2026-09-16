@@ -9,13 +9,13 @@
     aria-label="Primary"
     class="hidden lg:flex flex-1 justify-around items-center gap-1"
   >
-    <a th:href="@{/Home}" class="btn btn-ghost btn-sm rounded-field">
+    <a th:href="@{/home}" class="btn btn-ghost btn-sm rounded-field">
       Dashboard
     </a>
     <a th:href="@{/dashboard}" class="btn btn-ghost btn-sm rounded-field">
       Explore
     </a>
-    <a href="#" class="btn btn-ghost btn-sm rounded-field"> Your wardrobe </a>
+    <a href="#" class="btn btn-ghost btn-sm rounded-field">Your wardrobe</a>
     <a th:href="@{/profile}" class="btn btn-ghost btn-sm rounded-field">
       Profile
     </a>
@@ -162,7 +162,9 @@
                             and !#authentication.principal.profile_picture.isEmpty()}"
             class="avatar"
           >
-            <div class="w-10 h-10 rounded-full">
+            <div
+              class="w-10 h-10 rounded-full border-2 box-content border-accent"
+            >
               <img
                 th:src="${#authentication.principal.profile_picture}"
                 th:alt="${#authentication.principal.username + ' profile picture'}"
@@ -179,12 +181,13 @@
             >
               <span
                 th:text="${#strings.substring(#authentication.principal.username, 0, 1).toUpperCase()}"
-                >U</span
               >
+                U
+              </span>
             </div>
           </div>
           <span
-            class="hidden sm:inline text-base font-medium max-w-[8rem] truncate"
+            class="hidden sm:inline text-base font-medium max-w-32 truncate"
             th:text="${#authentication.principal.username}"
             >username</span
           >
@@ -229,32 +232,39 @@
         </li>
 
         <!-- Primary nav, folded in below md -->
-        <li class="md:hidden">
-          <a th:href="@{/Home}">Dashboard</a>
+        <li class="w-full">
+          <a th:href="@{/home}">Dashboard</a>
         </li>
-        <li class="md:hidden">
+        <li class="w-full">
           <a th:href="@{/explore}">Explore</a>
         </li>
-        <li class="md:hidden"><a href="#">Your wardrobe</a></li>
-
-        <div class="divider my-1 md:hidden"></div>
-
-        <li><a th:href="@{/profile}">Profile</a></li>
-        <li><a th:href="@{/profile/edit}">Edit profile</a></li>
-
-        <div class="divider my-1"></div>
-
-        <li>
-          <form th:action="@{/logout}" method="post">
-            <input
-              type="hidden"
-              th:if="${_csrf}"
-              th:name="${_csrf.parameterName}"
-              th:value="${_csrf.token}"
-            />
-            <button type="submit" class="w-full text-left">Logout</button>
-          </form>
+        <li class="w-full">
+          <a href="#">Your wardrobe</a>
         </li>
+
+        <div class="divider w-full my-1"></div>
+
+        <li class="w-full"><a th:href="@{/profile}">Profile</a></li>
+        <li class="w-full"><a th:href="@{/profile/edit}">Edit profile</a></li>
+
+        <div class="divider w-full my-1"></div>
+
+        <th:block sec:authorize="isAuthenticated()">
+          <li class="w-full">
+            <form th:action="@{/logout}" method="post">
+              <button type="submit" class="w-full text-left">Logout</button>
+            </form>
+          </li>
+        </th:block>
+
+        <th:block sec:authorize="!isAuthenticated()">
+          <li class="w-full">
+            <a th:href="@{/login}">Login</a>
+          </li>
+          <li class="w-full">
+            <a th:href="@{/register}">Register</a>
+          </li>
+        </th:block>
       </ul>
     </div>
   </div>
