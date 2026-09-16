@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Edit Profile</title>
+
+    <link rel="stylesheet" th:href="@{/css/output.css}"/>
+    <script th:src="@{/js/htmx.min.js}" defer></script>
+</head>
+
+<body
+        class="min-h-screen"
+        hx-boost="true"
+        hx-target="#main"
+        hx-select="#main"
+        hx-swap="outerHTML"
+        th:hx-headers="|{'${_csrf.headerName}': '${_csrf.token}'}|"
+>
+
+<div
+        id="main"
+        data-theme="fit-for-all-dark"
+        class="min-h-screen bg-base-100 text-base-content"
+>
+
+    <!-- Header -->
+    <header
+            class="flex items-center justify-between
+                   px-6 md:px-10 py-4
+                   border-b border-base-300"
+    >
+
+        <a href="/" class="flex items-center gap-2">
+            <img
+                    th:src="@{/images/logo.png}"
+                    alt="Logo"
+                    class="h-20 w-20 object-contain"
+            />
+        </a>
+
+        <div class="flex items-center gap-3">
+
+            <a
+                    th:href="@{/dashboard}"
+                    class="btn btn-ghost btn-sm"
+            >
+                Dashboard
+            </a>
+
+            <form
+                    th:action="@{/logout}"
+                    method="post"
+            >
+                <input
+                        type="hidden"
+                        th:if="${_csrf}"
+                        th:name="${_csrf.parameterName}"
+                        th:value="${_csrf.token}"
+                />
+
+                <button
+                        type="submit"
+                        class="btn btn-outline btn-sm"
+                >
+                    Log out
+                </button>
+            </form>
+
+        </div>
+
+    </header>
+
+
+    <!-- Edit Profile -->
+    <main class="flex justify-center px-6 py-12 md:py-20">
+
+        <div class="w-full max-w-3xl">
+
+            <!-- Heading -->
+            <div class="mb-8">
+
+                <p class="text-sm text-base-content/50">
+                    Account
+                </p>
+
+                <h1 class="text-3xl md:text-4xl font-bold">
+                    Edit Profile
+                </h1>
+
+                <p class="mt-2 text-base-content/60">
+                    Update your personal information.
+                </p>
+
+            </div>
+
+
+            <!-- Form card -->
+            <div
+                    data-theme="fit-for-all-light"
+                    class="card bg-base-100
+                           border border-base-300
+                           shadow-sm"
+            >
+
+                <div class="card-body">
+
+                    <form
+                            th:action="@{/profile/edit}"
+                            method="post"
+                            enctype="multipart/form-data"
+                            class="space-y-6"
+                    >
+
+                        <!-- CSRF -->
+                        <input
+                                type="hidden"
+                                th:if="${_csrf}"
+                                th:name="${_csrf.parameterName}"
+                                th:value="${_csrf.token}"
+                        />
+
+
+                        <!-- Error -->
+                        <div
+                                th:if="${profileError}"
+                                class="alert alert-error"
+                        >
+                            <span th:text="${profileError}"></span>
+                        </div>
+
+
+                        <!-- Profile picture -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text">
+                                    Profile picture
+                                </span>
+                            </label>
+
+                            <div class="flex items-center gap-6">
+
+                                <div class="avatar">
+
+                                    <!-- Uploaded profile picture -->
+                                    <div
+                                            th:if="${user.profile_picture != null
+                                                and !user.profile_picture.isEmpty()}"
+                                            class="w-20 h-20 rounded-full
+                                               ring ring-primary
+                                               ring-offset-base-100
+                                               ring-offset-2"
+                                    >
+                                        <img
+                                                th:src="${user.profile_picture}"
+                                                th:alt="${user.username + ' profile picture'}"
+                                        />
+                                    </div>
+
+                                    <!-- Default avatar -->
+                                    <div
+                                            th:unless="${user.profile_picture != null
+                                                    and !user.profile_picture.isEmpty()}"
+                                            class="w-20 h-20 rounded-full
+                                               bg-primary
+                                               text-primary-content
+                                               flex items-center justify-center
+                                               text-3xl font-bold
+                                               ring ring-primary
+                                               ring-offset-base-100
+                                               ring-offset-2"
+                                    >
+                                        <span
+                                                th:text="${#strings.substring(user.username, 0, 1).toUpperCase()}"
+                                        >
+                                            U
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                                <input
+                                        type="file"
+                                        id="profilePicture"
+                                        name="profilePicture"
+                                        accept="image/*"
+                                        class="file-input file-input-bordered w-full max-w-xs"
+                                />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Username -->
+                        <div>
+
+                            <label
+                                    for="username"
+                                    class="label"
+                            >
+                                <span class="label-text">
+                                    Username
+                                </span>
+                            </label>
+
+                            <input
+                                    type="text"
+                                    id="username"
+                                    th:value="${user.username}"
+                                    class="input input-bordered w-full"
+                                    disabled
+                            />
+
+                            <p class="text-sm text-base-content/50 mt-1">
+                                Username cannot be changed.
+                            </p>
+
+                        </div>
+
+
+                        <!-- Email -->
+                        <div>
+
+                            <label
+                                    for="email"
+                                    class="label"
+                            >
+                                <span class="label-text">
+                                    Email
+                                </span>
+                            </label>
+
+                            <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    th:value="${user.email}"
+                                    class="input input-bordered w-full"
+                                    required
+                            />
+
+                        </div>
+
+
+                        <!-- Bio -->
+                        <div>
+
+                            <label
+                                    for="bio"
+                                    class="label"
+                            >
+                                <span class="label-text">
+                                    Bio
+                                </span>
+                            </label>
+
+                            <textarea
+                                    id="bio"
+                                    name="bio"
+                                    rows="5"
+                                    class="textarea textarea-bordered w-full"
+                                    placeholder="Tell us about yourself..."
+                                    th:text="${user.bio}"
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="divider"></div>
+
+
+                        <!-- Actions -->
+                        <div
+                                class="flex flex-col sm:flex-row
+                                       justify-end gap-3"
+                        >
+
+                            <a
+                                    th:href="@{/profile}"
+                                    class="btn btn-ghost"
+                            >
+                                Cancel
+                            </a>
+
+                            <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                            >
+                                Save Changes
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
