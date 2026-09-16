@@ -17,7 +17,7 @@
         hx-target="#main"
         hx-select="#main"
         hx-swap="outerHTML"
-        th:hx-headers="|{'${_csrf.headerName}': '${_csrf.token}'}|"
+        th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
 >
 
 <div
