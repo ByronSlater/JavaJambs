@@ -190,6 +190,20 @@
 							</arguments>
 						</configuration>
 					</execution>
+					<execution>
+						<id>build-jimp-js</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>npm</executable>
+							<arguments>
+								<argument>run</argument>
+								<argument>build:js:jimp</argument>
+							</arguments>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
