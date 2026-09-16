@@ -12,7 +12,7 @@
   >
     <div id="main" class="bg-base-100 min-h-screen flex flex-col">
       <!-- Header -->
-      <header th:replace="~{fragments/user-header.html}"></header>
+      <div th:replace="~{fragments/header :: header}"></div>
 
       <!-- Body -->
       <main
@@ -52,20 +52,22 @@
         </div>
 
         <!-- Right: product demo video -->
-        <div class="rounded-box bg-base-200 border border-base-300 aspect-square flex items-center justify-center overflow-hidden">
+        <div
+          class="rounded-box bg-base-200 border border-base-300 aspect-square flex items-center justify-center overflow-hidden"
+        >
           <!--
               Replace this placeholder with the actual demo, e.g.:
               <video class="w-full h-full object-cover" autoplay muted loop playsinline th:src="@{/videos/demo.mp4}"></video>
           -->
 
-          <div class="w-4/5 h-3/4 border border-base-content/20 bg-base-100 rounded-box flex items-center justify-center">
-            <span class="text-base-content/40 text-sm">Demo video coming soon</span>
+          <div
+            class="w-4/5 h-3/4 border border-base-content/20 bg-base-100 rounded-box flex items-center justify-center"
+          >
+            <span class="text-base-content/40 text-sm"
+              >Demo video coming soon</span
+            >
           </div>
-
         </div>
-
-
-
       </main>
     </div>
   </body>
