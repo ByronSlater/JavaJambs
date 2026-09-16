@@ -67,17 +67,6 @@
     >
       <a th:replace="~{fragments/header :: logo}"></a>
 
-      <th:block sec:authorize="!isAuthenticated()">
-        <div class="flex items-center gap-3">
-          <a
-            th:href="@{/register}"
-            class="btn btn-outline btn-sm border-base-content/40 text-base-content hover:bg-base-content hover:text-base-100"
-          >
-            Register
-          </a>
-          <a th:href="@{/login}" class="btn btn-neutral btn-sm"> Log in </a>
-        </div>
-      </th:block>
       <div class="dropdown dropdown-end">
         <div
           tabindex="0"
@@ -87,7 +76,7 @@
           <svg viewBox="0 0 10 8" width="30">
             <path
               d="M1 1h8M1 4h 8M1 7h8"
-              stroke="#000"
+              stroke="currentColor"
               stroke-width="1"
               stroke-linecap="round"
             />
