@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
 
+import com.javajambs.cher.user.User;
+
 @Data
 @Entity
 @Table(name = "posts")
@@ -13,16 +15,18 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
     private String caption;
     private LocalDateTime createdAt;
 
     public Post() {
     }
 
-    public Post(String caption, Long userId) {
+    public Post(String caption, User user) {
         this.caption = caption;
-        this.userId = userId;
+        this.user = user;
         this.createdAt = LocalDateTime.now();
     }
 }

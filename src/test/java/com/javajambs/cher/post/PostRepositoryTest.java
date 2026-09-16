@@ -36,7 +36,7 @@ class PostRepositoryTest extends AbstractPostgresIntegrationTest {
     void save_persistsPostWithGeneratedId() {
         User user = persistUser("alice");
 
-        Post saved = postRepository.save(new Post("My outfit", user.getId()));
+        Post saved = postRepository.save(new Post("My outfit", user));
 
         assertThat(saved.getId()).isNotNull();
     }
@@ -44,13 +44,13 @@ class PostRepositoryTest extends AbstractPostgresIntegrationTest {
     @Test
     void findById_returnsTheSavedPost() {
         User user = persistUser("bob");
-        Post saved = postRepository.save(new Post("First post", user.getId()));
+        Post saved = postRepository.save(new Post("First post", user));
 
         Optional<Post> found = postRepository.findById(saved.getId());
 
         assertThat(found).isPresent();
         assertThat(found.get().getCaption()).isEqualTo("First post");
-        assertThat(found.get().getUserId()).isEqualTo(user.getId());
+        assertThat(found.get().getUser()).isEqualTo(user);
     }
 
     @Test
@@ -61,8 +61,8 @@ class PostRepositoryTest extends AbstractPostgresIntegrationTest {
     @Test
     void findAll_returnsEveryPersistedPost() {
         User user = persistUser("carol");
-        postRepository.save(new Post("Post one", user.getId()));
-        postRepository.save(new Post("Post two", user.getId()));
+        postRepository.save(new Post("Post one", user));
+        postRepository.save(new Post("Post two", user));
 
         assertThat(postRepository.findAll()).hasSize(2);
     }
@@ -70,7 +70,7 @@ class PostRepositoryTest extends AbstractPostgresIntegrationTest {
     @Test
     void deleteById_removesThePost() {
         User user = persistUser("dave");
-        Post saved = postRepository.save(new Post("Delete me", user.getId()));
+        Post saved = postRepository.save(new Post("Delete me", user));
 
         postRepository.deleteById(saved.getId());
 
@@ -80,8 +80,8 @@ class PostRepositoryTest extends AbstractPostgresIntegrationTest {
     @Test
     void count_reflectsTheNumberOfSavedPosts() {
         User user = persistUser("erin");
-        postRepository.save(new Post("Post one", user.getId()));
-        postRepository.save(new Post("Post two", user.getId()));
+        postRepository.save(new Post("Post one", user));
+        postRepository.save(new Post("Post two", user));
 
         assertThat(postRepository.count()).isEqualTo(2);
     }
@@ -89,7 +89,7 @@ class PostRepositoryTest extends AbstractPostgresIntegrationTest {
     @Test
     void existsById_isTrueForSavedPostAndFalseForUnknownId() {
         User user = persistUser("frank");
-        Post saved = postRepository.save(new Post("Exists check", user.getId()));
+        Post saved = postRepository.save(new Post("Exists check", user));
 
         assertThat(postRepository.existsById(saved.getId())).isTrue();
         assertThat(postRepository.existsById(-1L)).isFalse();

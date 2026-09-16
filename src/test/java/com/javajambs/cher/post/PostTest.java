@@ -3,29 +3,33 @@ package com.javajambs.cher.post;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
+import com.javajambs.cher.user.User;
 
 class PostTest {
 
     @Test
     void postIsCreated() {
-        Post post = new Post("My outfit", 1L);
+        User user = new User();
+        Post post = new Post("My outfit", user);
 
         assertEquals("My outfit", post.getCaption());
-        assertEquals(1L, post.getUserId());
+        assertEquals(user, post.getUser());
     }
 
     @Test
     void postSetsCreatedAt() {
-        Post post = new Post("My outfit", 1L);
+        User user = new User();
+        Post post = new Post("My outfit", user);
 
         assertNotNull(post.getCreatedAt());
     }
 
     @Test
     void postSetsCreatedAtToCurrentTime() {
+        User user = new User();
         LocalDateTime before = LocalDateTime.now();
 
-        Post post = new Post("My outfit", 1L);
+        Post post = new Post("My outfit", user);
 
         LocalDateTime after = LocalDateTime.now();
 
@@ -38,7 +42,7 @@ class PostTest {
         Post post = new Post();
 
         assertNull(post.getId());
-        assertNull(post.getUserId());
+        assertNull(post.getUser());
         assertNull(post.getCaption());
         assertNull(post.getCreatedAt());
     }
