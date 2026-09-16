@@ -39,7 +39,7 @@
         value="fit-for-all-dark"
         th:hx-post="${#authorization.expression('isAuthenticated()')} ? '/theme/fit-for-all-dark' : null"
         hx-swap="none"
-        oninput="localStorage.setItem('theme', 'fit-for-all-dark')"
+        oninput="localStorage.setItem('theme', 'fit-for-all-dark');"
       />
     </li>
   </ul>
