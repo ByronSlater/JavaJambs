@@ -19,7 +19,7 @@
         const localTheme = localStorage.getItem('theme')
 
         // 3. Fallback to default 'light'
-        const chosenTheme = serverTheme || localTheme || 'light'
+        const chosenTheme = serverTheme || localTheme || 'fit-for-all-light'
 
         // Apply the theme immediately to the <html> or <body> tag
         document.documentElement.setAttribute('data-theme', chosenTheme)
