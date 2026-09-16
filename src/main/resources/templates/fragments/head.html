@@ -4,6 +4,23 @@
   <title th:text="${title}">FitForAll</title>
   <link th:href="@{/css/output.css}" rel="stylesheet" type="text/css" />
   <script th:src="@{/js/htmx.min.js}" defer></script>
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    th:href="@{/images/favicon-32.png}"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="192x192"
+    th:href="@{/images/favicon-192.png}"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="512x512"
+    th:href="@{/images/favicon-512.png}"
+  />
   <th:block th:fragment="theme-resolver">
     <script th:inline="javascript">
       ;(function () {
