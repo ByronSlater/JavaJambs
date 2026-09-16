@@ -17,16 +17,21 @@
     "build:css": "tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css",
     "watch:css": "mkdir -p ./target/classes/static/css && tailwindcss -i ./src/main/resources/static/css/input.css -o ./target/classes/static/css/output.css --watch",
     "build:js": "mkdir -p ./src/main/resources/static/js && cp ./node_modules/htmx.org/dist/htmx.min.js ./src/main/resources/static/js/htmx.min.js",
+    "build:js:jimp": "mkdir -p ./src/main/resources/static/js && esbuild ./src/main/resources/static/js/jimp-editor.src.mjs --bundle --format=esm --platform=browser --outfile=./src/main/resources/static/js/jimp-editor.js",
+    "watch:js:jimp": "mkdir -p ./target/classes/static/js && esbuild ./src/main/resources/static/js/jimp-editor.src.mjs --bundle --format=esm --platform=browser --outfile=./target/classes/static/js/jimp-editor.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",
     "concurrently": "^10.0.5",
     "daisyui": "^5.7.37",
+    "esbuild": "^0.28.2",
     "tailwindcss": "^4.3.3"
   },
   "dependencies": {
-    "htmx.org": "^2.0.10"
+    "buffer": "^6.0.3",
+    "htmx.org": "^2.0.10",
+    "jimp": "^1.6.1"
   },
   "allowScripts": {
     "@parcel/watcher@2.5.1": true
