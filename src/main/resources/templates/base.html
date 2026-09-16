@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+  <head>
+    <title>FitForAll</title>
+    <th:block th:replace="~{fragments/head.html :: head}"></th:block>
+  </head>
+
+  <body
+    class="min-h-screen bg-base-100"
+    hx-boost="true"
+    hx-target="#main"
+    hx-select="#main"
+    hx-swap="outerHTML"
+    th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
+  >
+    <div id="main" class="bg-base-100 min-h-screen flex flex-col">
+      <div th:replace="~{fragments/auth-header.html}"></div>
+
+      <main
+        th:with="loggedIn=${#authorization.expression('isAuthenticated()')}"
+        class="grid grid-cols-[1fr]"
+        th:classappend="${loggedIn} ? 'md:grid-cols-[auto_1fr]' : ''"
+      >
+        <div
+          class="col-start-1 mb-20 md:mb-4 overflow-scroll max-h-lvh"
+          th:classappend="${loggedIn} ? 'md:col-start-2' : ''"
+          layout:fragment="content"
+        ></div>
+
+        <footer class="col-start-1 row-start-1" th:if="${loggedIn}">
+          <div th:replace="~{fragments/auth-footer.html}"></div>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>
