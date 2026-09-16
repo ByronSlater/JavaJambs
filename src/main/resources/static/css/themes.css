@@ -2,7 +2,6 @@
    Shared daisyUI theme definitions — fit-for-all-light / fit-for-all-dark.
    Link this file on every page (after the daisyUI CDN stylesheet) instead
    of copy-pasting the theme blocks into each page's <style>. */
-
 @plugin "daisyui/theme" {
     name: "fit-for-all-light";
     default: true;
