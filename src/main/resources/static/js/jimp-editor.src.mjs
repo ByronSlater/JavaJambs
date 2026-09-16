@@ -23,6 +23,12 @@ export function init(root) {
   const canvas = root.querySelector('[data-jimp-canvas]')
   const toleranceInput = root.querySelector('[data-jimp-tolerance]')
   const toleranceValue = root.querySelector('[data-jimp-tolerance-value]')
+  const wandControls = root.querySelector('[data-jimp-wand-controls]')
+  const brushControls = root.querySelector('[data-jimp-brush-controls]')
+  const brushSizeInput = root.querySelector('[data-jimp-brush-size]')
+  const brushSizeValue = root.querySelector('[data-jimp-brush-size-value]')
+  const brushCursor = root.querySelector('[data-jimp-brush-cursor]')
+  const toolButtons = root.querySelectorAll('[data-jimp-tool]')
   const resetButton = root.querySelector('[data-jimp-reset]')
   const undoButton = root.querySelector('[data-jimp-undo]')
   const downloadButton = root.querySelector('[data-jimp-download]')
@@ -32,7 +38,37 @@ export function init(root) {
   const ctx = canvas.getContext('2d', { willReadFrequently: true })
 
   let originalImageData = null
+  let toolMode = 'wand'
+  let isBrushing = false
+  let lastBrushPoint = null
   const undoStack = []
+
+  function canvasPointFromEvent(event) {
+    const rect = canvas.getBoundingClientRect()
+    return {
+      x: ((event.clientX - rect.left) / rect.width) * canvas.width,
+      y: ((event.clientY - rect.top) / rect.height) * canvas.height,
+      scale: rect.width / canvas.width,
+    }
+  }
+
+  function setToolMode(mode) {
+    toolMode = mode
+    for (const button of toolButtons) {
+      const isActive = button.dataset.jimpTool === mode
+      button.classList.toggle('btn-active', isActive)
+      button.setAttribute('aria-pressed', String(isActive))
+    }
+    wandControls.classList.toggle('hidden', mode !== 'wand')
+    brushControls.classList.toggle('hidden', mode !== 'brush')
+    canvas.style.cursor = mode === 'brush' ? 'none' : 'crosshair'
+    brushCursor.classList.add('hidden')
+  }
+
+  for (const button of toolButtons) {
+    button.addEventListener('click', () => setToolMode(button.dataset.jimpTool))
+  }
+  setToolMode(toolMode)
 
   function setStatus(message, isError = false) {
     status.textContent = message
@@ -55,7 +91,7 @@ export function init(root) {
       setControlsEnabled(true)
       undoStack.length = 0
       undoButton.disabled = true
-      setStatus(`Loaded ${file.name} (${canvas.width}x${canvas.height}). Click the image to magic-wand select and erase a region.`)
+      setStatus(`Loaded ${file.name} (${canvas.width}x${canvas.height}). Magic-wand click a region, or switch to Brush to erase by hand.`)
     } catch (error) {
       console.error(error)
       setStatus(`Could not load that image: ${error.message}`, true)
@@ -76,11 +112,11 @@ export function init(root) {
   }
 
   canvas.addEventListener('click', (event) => {
-    if (!originalImageData) return
+    if (toolMode !== 'wand' || !originalImageData) return
 
-    const rect = canvas.getBoundingClientRect()
-    const x = Math.floor(((event.clientX - rect.left) / rect.width) * canvas.width)
-    const y = Math.floor(((event.clientY - rect.top) / rect.height) * canvas.height)
+    const { x: rawX, y: rawY } = canvasPointFromEvent(event)
+    const x = Math.floor(rawX)
+    const y = Math.floor(rawY)
     if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -97,6 +133,85 @@ export function init(root) {
     toleranceValue.textContent = toleranceInput.value
   })
 
+  brushSizeInput.addEventListener('input', () => {
+    brushSizeValue.textContent = brushSizeInput.value
+    if (!brushCursor.classList.contains('hidden')) {
+      sizeBrushCursor()
+    }
+  })
+
+  function sizeBrushCursor() {
+    const rect = canvas.getBoundingClientRect()
+    const diameter = Number(brushSizeInput.value) * (rect.width / canvas.width)
+    brushCursor.style.width = `${diameter}px`
+    brushCursor.style.height = `${diameter}px`
+  }
+
+  canvas.addEventListener('pointermove', (event) => {
+    if (toolMode === 'brush' && originalImageData) {
+      sizeBrushCursor()
+      brushCursor.classList.remove('hidden')
+      brushCursor.style.left = `${event.offsetX}px`
+      brushCursor.style.top = `${event.offsetY}px`
+    }
+
+    if (isBrushing) {
+      brushEraseAt(event)
+    }
+  })
+
+  canvas.addEventListener('pointerleave', () => {
+    brushCursor.classList.add('hidden')
+  })
+
+  canvas.addEventListener('pointerdown', (event) => {
+    if (toolMode !== 'brush' || !originalImageData) return
+
+    isBrushing = true
+    lastBrushPoint = null
+    canvas.setPointerCapture(event.pointerId)
+
+    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height))
+    undoButton.disabled = false
+
+    ctx.save()
+    ctx.globalCompositeOperation = 'destination-out'
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
+
+    brushEraseAt(event)
+  })
+
+  function endBrushStroke() {
+    if (!isBrushing) return
+    isBrushing = false
+    lastBrushPoint = null
+    ctx.restore()
+    setStatus('Erased with the brush.')
+  }
+
+  canvas.addEventListener('pointerup', endBrushStroke)
+  canvas.addEventListener('pointercancel', endBrushStroke)
+
+  function brushEraseAt(event) {
+    const { x, y } = canvasPointFromEvent(event)
+    const radius = Number(brushSizeInput.value) / 2
+
+    ctx.lineWidth = radius * 2
+    if (lastBrushPoint) {
+      ctx.beginPath()
+      ctx.moveTo(lastBrushPoint.x, lastBrushPoint.y)
+      ctx.lineTo(x, y)
+      ctx.stroke()
+    }
+
+    ctx.beginPath()
+    ctx.arc(x, y, radius, 0, Math.PI * 2)
+    ctx.fill()
+
+    lastBrushPoint = { x, y }
+  }
+
   resetButton.addEventListener('click', () => {
     if (!originalImageData) return
     undoStack.length = 0
@@ -110,7 +225,7 @@ export function init(root) {
     if (!previous) return
     ctx.putImageData(previous, 0, 0)
     undoButton.disabled = undoStack.length === 0
-    setStatus('Undid the last magic wand erase.')
+    setStatus('Undid the last edit.')
   })
 
   downloadButton.addEventListener('click', () => {
