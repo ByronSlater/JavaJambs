@@ -11,8 +11,7 @@
     th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
   >
     <div id="main" class="bg-base-100 min-h-screen flex flex-col">
-      <div th:replace="~{fragments/header :: guest-header}"></div>
-      <header th:replace="fragments/anon-header.html"></header>
+      <div th:replace="~{fragments/header :: header}"></div>
 
       <!-- Body -->
       <div class="grid md:grid-cols-2 flex-1">
