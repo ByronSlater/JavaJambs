@@ -1,277 +1,261 @@
-<!--
-  Logged-in header: logo, primary nav, calendar + notifications,
-  theme switcher, and the account menu (avatar + username, profile
-  links, logout).
-
-  This is the header meant to sit on every authenticated section of
-  the site (dashboard/home, wardrobe, profile, etc). On small screens
-  the primary nav collapses into the account dropdown so there's only
-  ever one menu button to find.
-
-  Icon buttons are sized to the daisyUI default btn-circle (not
-  btn-sm) so every tap target stays comfortably above the 44px
-  accessibility minimum.
-
-  Usage:
-    <div th:replace="~{fragments/auth-header.html}"></div>
-  or, since it also declares a named fragment:
-    <div th:replace="~{fragments/auth-header :: header}"></div>
--->
 <header
-        th:fragment="header"
-        class="flex items-center justify-between gap-3 px-6 md:px-10 py-4 border-b border-base-300"
+  th:fragment="header"
+  class="flex items-center justify-between gap-3 px-6 md:px-10 py-4 border-b border-base-300"
 >
-    <a th:replace="~{fragments/header :: logo}"></a>
+  <a th:replace="~{fragments/header :: logo}"></a>
 
-    <!-- Primary nav: md+ only, folded into the account menu below md -->
-    <nav aria-label="Primary" class="hidden md:flex items-center gap-1">
-        <a th:href="@{/Home}" class="btn btn-ghost btn-sm rounded-field">
-            Dashboard
-        </a>
-        <a th:href="@{/dashboard}" class="btn btn-ghost btn-sm rounded-field">
-            Explore
-        </a>
-        <a href="#" class="btn btn-ghost btn-sm rounded-field"> Your wardrobe </a>
-        <a th:href="@{/profile}" class="btn btn-ghost btn-sm rounded-field">
-            Profile
-        </a>
-    </nav>
+  <!-- Primary nav: md+ only, folded into the account menu below md -->
+  <nav
+    aria-label="Primary"
+    class="hidden lg:flex flex-1 justify-around items-center gap-1"
+  >
+    <a th:href="@{/Home}" class="btn btn-ghost btn-sm rounded-field">
+      Dashboard
+    </a>
+    <a th:href="@{/dashboard}" class="btn btn-ghost btn-sm rounded-field">
+      Explore
+    </a>
+    <a href="#" class="btn btn-ghost btn-sm rounded-field"> Your wardrobe </a>
+    <a th:href="@{/profile}" class="btn btn-ghost btn-sm rounded-field">
+      Profile
+    </a>
+  </nav>
 
-    <div class="flex items-center gap-1 sm:gap-2">
-        <!-- Calendar -->
-        <a
-                href="#"
-                aria-label="Calendar"
-                title="Calendar"
-                class="btn btn-ghost btn-circle"
+  <div class="flex items-center gap-1 sm:gap-2">
+    <!-- Calendar -->
+    <a
+      href="#"
+      aria-label="Calendar"
+      title="Calendar"
+      class="btn btn-ghost btn-circle"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+        <path d="M16 3v4M8 3v4M3 10h18"></path>
+      </svg>
+    </a>
+
+    <!-- Notifications -->
+    <a
+      href="#"
+      aria-label="Notifications"
+      title="Notifications"
+      class="btn btn-ghost btn-circle"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+      </svg>
+    </a>
+
+    <!-- Theme switcher -->
+    <div class="dropdown dropdown-end">
+      <div
+        tabindex="0"
+        role="button"
+        aria-label="Change theme"
+        title="Change theme"
+        class="btn btn-ghost btn-circle"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
         >
-            <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="20"
-                    height="20"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                    focusable="false"
-            >
-                <rect x="3" y="5" width="18" height="16" rx="2"></rect>
-                <path d="M16 3v4M8 3v4M3 10h18"></path>
-            </svg>
-        </a>
+          <circle cx="12" cy="12" r="4"></circle>
+          <path
+            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+          ></path>
+        </svg>
+      </div>
+      <ul
+        tabindex="-1"
+        class="dropdown-content menu bg-base-200 rounded-box z-1 mt-3 w-44 p-2 shadow-sm"
+      >
+        <li>
+          <input
+            type="radio"
+            name="theme-dropdown-auth"
+            class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Default"
+            value="fit-for-all-light"
+            th:hx-post="@{/theme/fit-for-all-light}"
+            hx-swap="none"
+            oninput="localStorage.setItem('theme', 'fit-for-all-light')"
+          />
+        </li>
+        <li>
+          <input
+            type="radio"
+            name="theme-dropdown-auth"
+            class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Dark mode"
+            value="fit-for-all-dark"
+            th:hx-post="@{/theme/fit-for-all-dark}"
+            hx-swap="none"
+            oninput="localStorage.setItem('theme', 'fit-for-all-dark')"
+          />
+        </li>
+      </ul>
+      <script>
+        /**
+         * Pre-select the theme radio matching what's already applied,
+         * same pattern as the guest header / head fragment use.
+         */
+        ;(() => {
+          let tr = document.querySelector(
+            `input[name="theme-dropdown-auth"][value="${localStorage.getItem(
+              'theme'
+            )}"]`
+          )
 
-        <!-- Notifications -->
-        <a
-                href="#"
-                aria-label="Notifications"
-                title="Notifications"
-                class="btn btn-ghost btn-circle"
-        >
-            <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="20"
-                    height="20"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                    focusable="false"
-            >
-                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-            </svg>
-        </a>
-
-        <!-- Theme switcher -->
-        <div class="dropdown dropdown-end">
-            <div
-                    tabindex="0"
-                    role="button"
-                    aria-label="Change theme"
-                    title="Change theme"
-                    class="btn btn-ghost btn-circle"
-            >
-                <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width="20"
-                        height="20"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                        focusable="false"
-                >
-                    <circle cx="12" cy="12" r="4"></circle>
-                    <path
-                            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
-                    ></path>
-                </svg>
-            </div>
-            <ul
-                    tabindex="-1"
-                    class="dropdown-content menu bg-base-200 rounded-box z-1 mt-3 w-44 p-2 shadow-sm"
-            >
-                <li>
-                    <input
-                            type="radio"
-                            name="theme-dropdown-auth"
-                            class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-                            aria-label="Default"
-                            value="fit-for-all-light"
-                            th:hx-post="@{/theme/fit-for-all-light}"
-                            hx-swap="none"
-                            oninput="localStorage.setItem('theme', 'fit-for-all-light')"
-                    />
-                </li>
-                <li>
-                    <input
-                            type="radio"
-                            name="theme-dropdown-auth"
-                            class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-                            aria-label="Dark mode"
-                            value="fit-for-all-dark"
-                            th:hx-post="@{/theme/fit-for-all-dark}"
-                            hx-swap="none"
-                            oninput="localStorage.setItem('theme', 'fit-for-all-dark')"
-                    />
-                </li>
-            </ul>
-            <script>
-                /**
-                 * Pre-select the theme radio matching what's already applied,
-                 * same pattern as the guest header / head fragment use.
-                 */
-                ;(() => {
-                    let tr = document.querySelector(
-                        `input[name="theme-dropdown-auth"][value="${localStorage.getItem(
-                            'theme'
-                        )}"]`
-                    )
-
-                    if (tr) {
-                        tr.checked = true
-                    }
-                })()
-            </script>
-        </div>
-
-        <!-- Account menu -->
-        <div class="dropdown dropdown-end">
-            <div
-                    tabindex="0"
-                    role="button"
-                    aria-label="Account menu"
-                    class="btn btn-ghost rounded-field pl-1 pr-3 gap-2"
-            >
-                <th:block sec:authorize="isAuthenticated()">
-                    <div
-                            th:if="${#authentication.principal.profile_picture != null
-                            and !#authentication.principal.profile_picture.isEmpty()}"
-                            class="avatar"
-                    >
-                        <div class="w-10 h-10 rounded-full">
-                            <img
-                                    th:src="${#authentication.principal.profile_picture}"
-                                    th:alt="${#authentication.principal.username + ' profile picture'}"
-                            />
-                        </div>
-                    </div>
-                    <div
-                            th:unless="${#authentication.principal.profile_picture != null
-                                and !#authentication.principal.profile_picture.isEmpty()}"
-                            class="avatar avatar-placeholder"
-                    >
-                        <div
-                                class="bg-primary text-primary-content w-10 h-10 rounded-full flex items-center justify-center text-base font-bold"
-                        >
-              <span
-                      th:text="${#strings.substring(#authentication.principal.username, 0, 1).toUpperCase()}"
-              >U</span
-              >
-                        </div>
-                    </div>
-                    <span
-                            class="hidden sm:inline text-base font-medium max-w-[8rem] truncate"
-                            th:text="${#authentication.principal.username}"
-                    >username</span
-                    >
-                </th:block>
-                <th:block sec:authorize="!isAuthenticated()">
-                    <div class="avatar avatar-placeholder">
-                        <div
-                                class="bg-neutral text-neutral-content w-10 h-10 rounded-full flex items-center justify-center text-base font-bold"
-                        >
-                            ?
-                        </div>
-                    </div>
-                    <span class="hidden sm:inline text-base font-medium">Account</span>
-                </th:block>
-                <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 12 8"
-                        width="10"
-                        height="10"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                        focusable="false"
-                >
-                    <path d="M1 1.5l5 5 5-5"></path>
-                </svg>
-            </div>
-
-            <ul
-                    tabindex="-1"
-                    class="dropdown-content menu bg-base-200 rounded-box z-1 mt-3 w-56 p-2 shadow-sm"
-            >
-                <li
-                        class="menu-title truncate"
-                        sec:authorize="isAuthenticated()"
-                        th:text="${#authentication.principal.email}"
-                >
-                    you@example.com
-                </li>
-
-                <!-- Primary nav, folded in below md -->
-                <li class="md:hidden">
-                    <a th:href="@{/Home}">Dashboard</a>
-                </li>
-                <li class="md:hidden">
-                    <a th:href="@{/explore}">Explore</a>
-                </li>
-                <li class="md:hidden"><a href="#">Your wardrobe</a></li>
-
-                <div class="divider my-1 md:hidden"></div>
-
-                <li><a th:href="@{/profile}">Profile</a></li>
-                <li><a th:href="@{/profile/edit}">Edit profile</a></li>
-
-                <div class="divider my-1"></div>
-
-                <li>
-                    <form th:action="@{/logout}" method="post">
-                        <input
-                                type="hidden"
-                                th:if="${_csrf}"
-                                th:name="${_csrf.parameterName}"
-                                th:value="${_csrf.token}"
-                        />
-                        <button type="submit" class="w-full text-left">Logout</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
+          if (tr) {
+            tr.checked = true
+          }
+        })()
+      </script>
     </div>
+
+    <!-- Account menu -->
+    <div class="dropdown dropdown-end">
+      <div
+        tabindex="0"
+        role="button"
+        aria-label="Account menu"
+        class="btn btn-ghost rounded-field pl-1 pr-3 gap-2"
+      >
+        <th:block sec:authorize="isAuthenticated()">
+          <div
+            th:if="${#authentication.principal.profile_picture != null
+                            and !#authentication.principal.profile_picture.isEmpty()}"
+            class="avatar"
+          >
+            <div class="w-10 h-10 rounded-full">
+              <img
+                th:src="${#authentication.principal.profile_picture}"
+                th:alt="${#authentication.principal.username + ' profile picture'}"
+              />
+            </div>
+          </div>
+          <div
+            th:unless="${#authentication.principal.profile_picture != null
+                                and !#authentication.principal.profile_picture.isEmpty()}"
+            class="avatar avatar-placeholder"
+          >
+            <div
+              class="bg-primary text-primary-content w-10 h-10 rounded-full flex items-center justify-center text-base font-bold"
+            >
+              <span
+                th:text="${#strings.substring(#authentication.principal.username, 0, 1).toUpperCase()}"
+                >U</span
+              >
+            </div>
+          </div>
+          <span
+            class="hidden sm:inline text-base font-medium max-w-[8rem] truncate"
+            th:text="${#authentication.principal.username}"
+            >username</span
+          >
+        </th:block>
+        <th:block sec:authorize="!isAuthenticated()">
+          <div class="avatar avatar-placeholder">
+            <div
+              class="bg-neutral text-neutral-content w-10 h-10 rounded-full flex items-center justify-center text-base font-bold"
+            >
+              ?
+            </div>
+          </div>
+          <span class="hidden sm:inline text-base font-medium">Account</span>
+        </th:block>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 12 8"
+          width="10"
+          height="10"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M1 1.5l5 5 5-5"></path>
+        </svg>
+      </div>
+
+      <ul
+        tabindex="-1"
+        class="dropdown-content menu bg-base-200 rounded-box z-1 mt-3 w-56 p-2 shadow-sm"
+      >
+        <li
+          class="menu-title block max-w-56 truncate"
+          sec:authorize="isAuthenticated()"
+          th:text="${#authentication.principal.email}"
+        >
+          you@example.com
+        </li>
+
+        <!-- Primary nav, folded in below md -->
+        <li class="md:hidden">
+          <a th:href="@{/Home}">Dashboard</a>
+        </li>
+        <li class="md:hidden">
+          <a th:href="@{/explore}">Explore</a>
+        </li>
+        <li class="md:hidden"><a href="#">Your wardrobe</a></li>
+
+        <div class="divider my-1 md:hidden"></div>
+
+        <li><a th:href="@{/profile}">Profile</a></li>
+        <li><a th:href="@{/profile/edit}">Edit profile</a></li>
+
+        <div class="divider my-1"></div>
+
+        <li>
+          <form th:action="@{/logout}" method="post">
+            <input
+              type="hidden"
+              th:if="${_csrf}"
+              th:name="${_csrf.parameterName}"
+              th:value="${_csrf.token}"
+            />
+            <button type="submit" class="w-full text-left">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
 </header>

@@ -1,73 +1,49 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head.html :: head('Home')}"></head>
-
-<body
-        class="min-h-screen"
-        hx-boost="true"
-        hx-target="#main"
-        hx-select="#main"
-        hx-swap="outerHTML"
-        th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{base.html}"
 >
-<div id="main" class="bg-base-100 min-h-screen flex flex-col">
-    <!-- Header -->
-    <div th:replace="~{fragments/auth-header.html}"></div>
+  <head>
+    <title>Home Page</title>
+  </head>
 
-    <!-- Signed-in dashboard -->
-    <th:block sec:authorize="isAuthenticated()">
-        <div class="flex-1 flex flex-col md:flex-row">
+  <body>
+    <div layout:fragment="content">
+      <th:block sec:authorize="isAuthenticated()">
+        <section class="flex flex-col gap-2 m-8 md:col-start-2">
+          <span class="badge badge-neutral badge-lg py-4 px-4 w-fit">
+            Welcome back 👋
+          </span>
 
+          <h1
+            class="text-3xl md:text-4xl font-bold"
+            th:text="'Hi, ' + ${#authentication.principal.username} + '!'"
+          >
+            Hi, username!
+          </h1>
 
-            <main
-                    class="flex-1 flex flex-col gap-10 px-6 md:px-10 py-10 pb-28 md:pb-10 max-w-6xl mx-auto w-full"
-            >
-                <!-- Welcome -->
-                <section class="flex flex-col gap-2">
-              <span class="badge badge-neutral badge-lg py-4 px-4 w-fit">
-                Welcome back 👋
-              </span>
+          <p class="text-base-content/70 max-w-xl">
+            Here's a quick look at your wardrobe.
+          </p>
+        </section>
+      </th:block>
 
-                    <h1
-                            class="text-3xl md:text-4xl font-bold"
-                            th:text="'Hi, ' + ${#authentication.principal.username} + '!'"
-                    >
-                        Hi, username!
-                    </h1>
-
-                    <p class="text-base-content/70 max-w-xl">
-                        Here's a quick look at your wardrobe.
-                    </p>
-                </section>
-
-
-                <footer><!-- Primary nav: bottom bar on mobile, sidebar rail on desktop -->
-                    <div th:replace="~{fragments/auth-footer.html}"></div>
-                </footer>
-            </main>
+      <th:block sec:authorize="!isAuthenticated()">
+        <span class="text-5xl" aria-hidden="true">🔒</span>
+        <h1 class="text-2xl font-bold">
+          This dashboard is for logged-in users
+        </h1>
+        <p class="text-base-content/70 max-w-sm">
+          Log in or create an account to see your wardrobe dashboard.
+        </p>
+        <div class="flex gap-3">
+          <a th:href="@{/login}" class="btn btn-neutral">Log in</a>
+          <a th:href="@{/register}" class="btn btn-neutral btn-outline">
+            Register
+          </a>
         </div>
-    </th:block>
-
-    <!-- Signed-out fallback -->
-    <th:block sec:authorize="!isAuthenticated()">
-        <main
-                class="flex-1 flex flex-col items-center justify-center text-center gap-4 px-6 py-20"
-        >
-            <span class="text-5xl" aria-hidden="true">🔒</span>
-            <h1 class="text-2xl font-bold">
-                This dashboard is for logged-in users
-            </h1>
-            <p class="text-base-content/70 max-w-sm">
-                Log in or create an account to see your wardrobe dashboard.
-            </p>
-            <div class="flex gap-3">
-                <a th:href="@{/login}" class="btn btn-neutral">Log in</a>
-                <a th:href="@{/register}" class="btn btn-neutral btn-outline">
-                    Register
-                </a>
-            </div>
-        </main>
-    </th:block>
-</div>
-</body>
+      </th:block>
+    </div>
+  </body>
 </html>
