@@ -72,7 +72,7 @@ public class ClothesController {
             return "clothes/new";
         }
 
-        return "/clothes";
+        return "redirect:/clothes";
     }    
 
         @GetMapping("/clothes/{id}/edit")
@@ -97,10 +97,6 @@ public class ClothesController {
             @AuthenticationPrincipal User user, 
             @PathVariable Long id, 
             @RequestParam String name, 
-            @RequestParam(required = false) String brand, 
-            @RequestParam(required = false) String type, 
-            @RequestParam(required = false) String colour, 
-            @RequestParam(required = false) String size, 
             @RequestParam(required = false) MultipartFile image, 
             Model model) {
 
