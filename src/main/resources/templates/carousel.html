@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{base.html}"
+>
+  <head>
+    <title>Cher's Closet</title>
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <section class="mb-6">
+        <h1 class="text-3xl md:text-4xl font-bold">Cher's Closet</h1>
+        <p class="text-base-content/70 max-w-xl">
+          Cycle through hats, tops, bottoms and shoes to put an outfit together.
+        </p>
+      </section>
+
+      <div class="flex flex-col -gap-[50px] bg-base-300 items-center w-full">
+        <th:block th:each="closet : ${closets}">
+          <div
+            class="carousel carousel-center rounded-box w-full gap-10"
+            data-carousel
+          >
+            <div class="carousel-item ml-250"></div>
+            <div class="carousel-item w-25 h-25 mx-20"></div>
+            <div th:each="item, iter : ${closet.items}" class="carousel-item">
+              <img
+                th:src="@{${item.url}}"
+                th:width="${item.size}"
+                th:height="${item.size}"
+              />
+            </div>
+            <div class="carousel-item"></div>
+            <div class="carousel-item mr-250"></div>
+          </div>
+        </th:block>
+      </div>
+    </div>
+  </body>
+</html>

@@ -3,84 +3,84 @@
    Link this file on every page (after the daisyUI CDN stylesheet) instead
    of copy-pasting the theme blocks into each page's <style>. */
 @plugin "daisyui/theme" {
-    name: "fit-for-all-light";
-    default: true;
-    prefersdark: false;
-    color-scheme: light;
+   name: "fit-for-all-light";
+   default: true;
+   prefersdark: false;
+   color-scheme: light;
 
-    --color-base-100: oklch(98.2% 0.006 128.5);
-    --color-base-200: oklch(95.2% 0.006 128.5);
-    --color-base-300: oklch(90.2% 0.006 128.5);
-    --color-base-content: #17201B;
-    --color-primary: #426B3A;
-    --color-primary-content: #FFFFFF;
-    --color-secondary: #863F22;
-    --color-secondary-content: #FFFFFF;
-    --color-accent: #55416B;
-    --color-accent-content: #FFFFFF;
-    --color-neutral: #1C2620;
-    --color-neutral-content: #FFFFFF;
-    --color-info: #00479C;
-    --color-info-content: #FFFFFF;
-    --color-success: #1F5730;
-    --color-success-content: #FFFFFF;
-    --color-warning: #6B4400;
-    --color-warning-content: #FFFFFF;
-    --color-error: #96201A;
-    --color-error-content: #FFFFFF;
-    --radius-selector: 0.5rem;
-    --radius-field: 0.25rem;
-    --radius-box: 0.5rem;
-    --size-selector: 0.25rem;
-    --size-field: 0.25rem;
-    --border: 1px;
-    --depth: 1;
-    --noise: 0;
+   --color-base-100: oklch(98.2% 0.006 128.5);
+   --color-base-200: oklch(95.2% 0.006 128.5);
+   --color-base-300: oklch(90.2% 0.006 128.5);
+   --color-base-content: #17201B;
+   --color-primary: #426B3A;
+   --color-primary-content: #FFFFFF;
+   --color-secondary: #863F22;
+   --color-secondary-content: #FFFFFF;
+   --color-accent: #55416B;
+   --color-accent-content: #FFFFFF;
+   --color-neutral: #1C2620;
+   --color-neutral-content: #FFFFFF;
+   --color-info: #00479C;
+   --color-info-content: #FFFFFF;
+   --color-success: #1F5730;
+   --color-success-content: #FFFFFF;
+   --color-warning: #6B4400;
+   --color-warning-content: #FFFFFF;
+   --color-error: #96201A;
+   --color-error-content: #FFFFFF;
+   --radius-selector: 0.5rem;
+   --radius-field: 0.25rem;
+   --radius-box: 0.5rem;
+   --size-selector: 0.25rem;
+   --size-field: 0.25rem;
+   --border: 1px;
+   --depth: 1;
+   --noise: 0;
 
-    /* Fixed light backdrop for the logo — always light regardless of
+   /* Fixed light backdrop for the logo — always light regardless of
        theme, since the logo artwork (dark linework + text) needs a
        light canvas behind it to stay readable. Use this specifically
        on the logo's wrapper, not on general UI surfaces. */
-    --color-logo-bg: #F9FAF7;
+   --color-logo-bg: #F9FAF7;
 }
 
 @plugin "daisyui/theme" {
-    name: "fit-for-all-dark";
-    default: false;
-    prefersdark: true;
-    color-scheme: dark;
+   name: "fit-for-all-dark";
+   default: false;
+   prefersdark: true;
+   color-scheme: dark;
 
-    --color-base-100: oklch(23.3% 0.016 160.5);
-    --color-base-200: oklch(26.3% 0.016 160.5);
-    --color-base-300: oklch(33.3% 0.016 160.5);
-    --color-base-content: oklch(97.807% 0.029 256.847);
-    --color-primary: #A8D89A;
-    --color-primary-content: #17201B;
-    --color-secondary: #F0A083;
-    --color-secondary-content: #17201B;
-    --color-accent: #C8B4DF;
-    --color-accent-content: #17201B;
-    --color-neutral: #222D26;
-    --color-neutral-content: oklch(98% 0 0);
-    --color-info: #79B8FF;
-    --color-info-content: #17201B;
-    --color-success: #8FD39B;
-    --color-success-content: #17201B;
-    --color-warning: #FFD166;
-    --color-warning-content: #17201B;
-    --color-error: #FFB4AB;
-    --color-error-content: #17201B;
-    --radius-selector: 0.5rem;
-    --radius-field: 0.25rem;
-    --radius-box: 0.5rem;
-    --size-selector: 0.25rem;
-    --size-field: 0.25rem;
-    --border: 1px;
-    --depth: 1;
-    --noise: 0;
+   --color-base-100: oklch(23.3% 0.016 160.5);
+   --color-base-200: oklch(26.3% 0.016 160.5);
+   --color-base-300: oklch(33.3% 0.016 160.5);
+   --color-base-content: oklch(97.807% 0.029 256.847);
+   --color-primary: #A8D89A;
+   --color-primary-content: #17201B;
+   --color-secondary: #F0A083;
+   --color-secondary-content: #17201B;
+   --color-accent: #C8B4DF;
+   --color-accent-content: #17201B;
+   --color-neutral: #222D26;
+   --color-neutral-content: oklch(98% 0 0);
+   --color-info: #79B8FF;
+   --color-info-content: #17201B;
+   --color-success: #8FD39B;
+   --color-success-content: #17201B;
+   --color-warning: #FFD166;
+   --color-warning-content: #17201B;
+   --color-error: #FFB4AB;
+   --color-error-content: #17201B;
+   --radius-selector: 0.5rem;
+   --radius-field: 0.25rem;
+   --radius-box: 0.5rem;
+   --size-selector: 0.25rem;
+   --size-field: 0.25rem;
+   --border: 1px;
+   --depth: 1;
+   --noise: 0;
 
-    /* Same fixed light backdrop as the light theme — the logo needs
+   /* Same fixed light backdrop as the light theme — the logo needs
        this even in dark mode, since its dark linework/text would
        vanish against the dark base colors otherwise. */
-    --color-logo-bg: #F9FAF7;
+   --color-logo-bg: #F9FAF7;
 }
