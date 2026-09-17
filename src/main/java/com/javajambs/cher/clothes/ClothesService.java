@@ -46,6 +46,32 @@ public Clothes addClothingItem(User user, String name, MultipartFile image) thro
     return clothesRepository.save(clothes);
 }
 
+public Clothes updateClothingItem(
+        Long clothesId, User requestingUser, String name, 
+        MultipartFile image) throws IOException{
+
+            Clothes clothes = clothesRepository.findById(clothesId)
+            .orElseThrow(() -> new NoSuchElementException("No clothing item with id " + clothesId));
+
+            if (!clothes.getUser().equals(requestingUser)) {
+                throw new AccessDeniedException("You do not own this clothing item");
+            }
+
+            clothes.setName(name);
+
+            if (image != null && !image.isEmpty()){
+                String contentType = image.getContentType();
+                if (contentType == null || !contentType.startsWith("image?")){
+                    throw new IOException("Clothing photo must be an image");
+                }
+
+                String filename = imageService.uploadImage("clothes", image);
+                clothes.setImageUrl("/img/clothes/%s".formatted(filename));
+            }
+
+            return clothesRepository.save(clothes);
+        }
+
 public void deleteClothingItem(Long clothesId, User requestingUser) {
     Clothes clothes = clothesRepository.findById(clothesId)
             .orElseThrow(() -> new NoSuchElementException("No clothing item with id " + clothesId));
