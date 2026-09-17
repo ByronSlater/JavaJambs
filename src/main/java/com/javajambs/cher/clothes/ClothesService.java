@@ -76,13 +76,22 @@ public void deleteClothingItem(Long clothesId, User requestingUser) {
     Clothes clothes = clothesRepository.findById(clothesId)
             .orElseThrow(() -> new NoSuchElementException("No clothing item with id " + clothesId));
 
-    if (!clothes.getUser().equals(requestingUser)) {
+        if (!clothes.getUser().equals(requestingUser)) {
         throw new AccessDeniedException("You do not own this clothing item");
-    }
+        }
 
-    clothesRepository.delete(clothes);
+        clothesRepository.delete(clothes);
 }
 
+public Clothes getClothingItemForEdit(Long clothesId, User requestingUser) {
+    Clothes clothes = clothesRepository.findById(clothesId)
+            .orElseThrow(() -> new NoSuchElementException("No clothing item with id " + clothesId));
 
+        if (!clothes.getUser().equals(requestingUser)) {
+        throw new AccessDeniedException("You do not own this clothing item");
+        }
+
+        return clothes;
+    }
 
 }
