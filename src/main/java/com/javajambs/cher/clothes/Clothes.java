@@ -1,7 +1,6 @@
 package com.javajambs.cher.clothes;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 import com.javajambs.cher.user.User;
 
@@ -44,12 +43,8 @@ public class Clothes {
         this.createdAt = Instant.now();
     } 
 
-    public Clothes(String name, String brand, String type, String colour, String size, User user) {
+    public Clothes(String name, User user) {
         this.name = name;
-        this.brand = brand;
-        this.type = type;  
-        this.colour = colour;
-        this.size = size; 
         this.user = user;
     }
 }
