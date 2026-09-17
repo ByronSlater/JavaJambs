@@ -1,21 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="~{fragments/head.html :: head}"></head>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{base.html}"
+>
+  <head>
+    <title>JIMP</title>
+  </head>
 
-  <body
-    class="min-h-screen"
-    hx-boost="true"
-    hx-target="#main"
-    hx-select="#main"
-    hx-swap="outerHTML"
-    th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
-    th:data-csrf-header="${_csrf.headerName}"
-    th:data-csrf-token="${_csrf.token}"
-  >
-    <div id="main" class="min-h-screen bg-base-100 text-base-content">
-      <header th:replace="~{fragments/header.html :: header}"></header>
-
-      <main class="flex justify-center px-6 py-12 md:py-16">
+  <body>
+    <div layout:fragment="content">
+      <main class="flex justify-center">
         <div class="w-full max-w-4xl">
           <div class="mb-8">
             <h1 class="text-3xl md:text-4xl font-bold">
@@ -183,11 +178,5 @@
         </div>
       </main>
     </div>
-
-    <script type="module">
-      import { init } from '/js/jimp-editor.js'
-
-      init(document.body)
-    </script>
   </body>
 </html>
