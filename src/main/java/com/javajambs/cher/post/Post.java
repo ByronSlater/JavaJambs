@@ -19,6 +19,7 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
     private String caption;
+    private String imageUrl;
     private LocalDateTime createdAt;
 
     public Post() {

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{base.html}"
+>
+  <head>
+    <title>Edit Post</title>
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <!-- Edit Post -->
+      <main class="flex justify-center">
+        <div class="w-full max-w-3xl">
+          <!-- Heading -->
+          <div class="mb-8">
+            <p class="text-sm text-base-content/50">Community</p>
+
+            <h1 class="text-3xl md:text-4xl font-bold">Edit Post</h1>
+
+            <p class="mt-2 text-base-content/60">Update your caption.</p>
+          </div>
+
+          <!-- Form card -->
+          <div class="card bg-base-100 border border-base-300 shadow-sm">
+            <div class="card-body">
+              <form
+                th:action="@{/posts/{id}/edit(id=${post.id})}"
+                th:object="${post}"
+                method="post"
+                enctype="multipart/form-data"
+                class="space-y-6"
+              >
+                <!-- CSRF -->
+                <input
+                  type="hidden"
+                  th:if="${_csrf}"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}"
+                />
+
+                <!-- Error -->
+                <div th:if="${postError}" class="alert alert-error">
+                  <span th:text="${postError}"></span>
+                </div>
+
+                <!-- Caption -->
+                <div>
+                  <label for="caption" class="label">
+                    <span class="label-text">Caption</span>
+                  </label>
+
+                  <textarea
+                    id="caption"
+                    th:field="*{caption}"
+                    rows="5"
+                    class="textarea textarea-bordered w-full"
+                    required
+                  ></textarea>
+                </div>
+
+                <!-- Photo -->
+                <div>
+                  <label class="label">
+                    <span class="label-text">Photo</span>
+                  </label>
+
+                  <img
+                    th:if="${post.imageUrl != null and !post.imageUrl.isEmpty()}"
+                    th:src="${post.imageUrl}"
+                    alt="Current post image"
+                    class="mb-3 rounded-lg max-h-64 object-cover"
+                  />
+
+                  <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept="image/*"
+                    class="file-input file-input-bordered w-full max-w-xs"
+                  />
+
+                  <p class="text-sm text-base-content/50 mt-1">
+                    Upload a new photo to replace the current one.
+                  </p>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Actions -->
+                <div class="flex flex-col sm:flex-row justify-end gap-3">
+                  <a th:href="@{/posts}" class="btn btn-ghost">Cancel</a>
+
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
