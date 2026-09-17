@@ -61,7 +61,7 @@ public Clothes updateClothingItem(
 
             if (image != null && !image.isEmpty()){
                 String contentType = image.getContentType();
-                if (contentType == null || !contentType.startsWith("image?")){
+                if (contentType == null || !contentType.startsWith("image/")){
                     throw new IOException("Clothing photo must be an image");
                 }
 
