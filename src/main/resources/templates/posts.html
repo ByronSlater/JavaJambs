@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{base.html}"
+>
+  <head>
+    <title>Posts</title>
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <!-- Posts -->
+      <main class="flex justify-center">
+        <div class="w-full max-w-3xl">
+          <!-- Heading -->
+          <div class="mb-8">
+            <p class="text-sm text-base-content/50">Community</p>
+
+            <h1 class="text-3xl md:text-4xl font-bold">Posts</h1>
+
+            <p class="mt-2 text-base-content/60">
+              Share an update or see what others have posted.
+            </p>
+          </div>
+
+          <!-- New post card -->
+          <div class="card bg-base-100 border border-base-300 shadow-sm mb-8">
+            <div class="card-body">
+              <form
+                th:action="@{/posts}"
+                th:object="${post}"
+                method="post"
+                enctype="multipart/form-data"
+                class="space-y-4"
+              >
+                <!-- CSRF -->
+                <input
+                  type="hidden"
+                  th:if="${_csrf}"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}"
+                />
+
+                <!-- Error -->
+                <div th:if="${postError}" class="alert alert-error">
+                  <span th:text="${postError}"></span>
+                </div>
+
+                <div>
+                  <label for="caption" class="label">
+                    <span class="label-text">What's on your mind?</span>
+                  </label>
+
+                  <textarea
+                    id="caption"
+                    th:field="*{caption}"
+                    rows="3"
+                    class="textarea textarea-bordered w-full"
+                    placeholder="Write a caption..."
+                    required
+                  ></textarea>
+                </div>
+
+                <div>
+                  <label for="image" class="label">
+                    <span class="label-text">Photo</span>
+                  </label>
+
+                  <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept="image/*"
+                    class="file-input file-input-bordered w-full max-w-xs"
+                  />
+                </div>
+
+                <div class="flex justify-end">
+                  <button type="submit" class="btn btn-primary">Post</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Post list -->
+          <div class="flex flex-col gap-4">
+            <div
+              th:each="p : ${posts}"
+              class="card bg-base-100 border border-base-300 shadow-sm"
+            >
+              <div class="card-body">
+                <div class="flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                    <div class="avatar">
+                      <div
+                        class="w-10 h-10 rounded-full bg-primary text-primary-content flex items-center justify-center font-bold ring ring-primary ring-offset-base-100 ring-offset-2"
+                      >
+                        <span
+                          th:text="${#strings.substring(p.user.username, 0, 1).toUpperCase()}"
+                        >
+                          U
+                        </span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p class="font-medium" th:text="${p.user.username}">
+                        username
+                      </p>
+
+                      <p
+                        class="text-xs text-base-content/50"
+                        th:text="${#temporals.format(p.createdAt, 'dd MMMM yyyy, HH:mm')}"
+                      >
+                        15 September 2026, 10:00
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex gap-2">
+                    <a
+                      th:href="@{/posts/{id}/edit(id=${p.id})}"
+                      class="btn btn-ghost btn-sm"
+                    >
+                      Edit
+                    </a>
+
+                    <form th:action="@{/posts/{id}/delete(id=${p.id})}" method="post">
+                      <input
+                        type="hidden"
+                        th:if="${_csrf}"
+                        th:name="${_csrf.parameterName}"
+                        th:value="${_csrf.token}"
+                      />
+
+                      <button type="submit" class="btn btn-ghost btn-sm text-error">
+                        Delete
+                      </button>
+                    </form>
+                  </div>
+                </div>
+
+                <p class="mt-3 text-base-content/80" th:text="${p.caption}">
+                  Post caption goes here.
+                </p>
+
+                <img
+                  th:if="${p.imageUrl != null and !p.imageUrl.isEmpty()}"
+                  th:src="${p.imageUrl}"
+                  alt="Post image"
+                  class="mt-3 rounded-lg w-full max-h-96 object-cover"
+                />
+              </div>
+            </div>
+
+            <p
+              th:if="${posts == null or #lists.isEmpty(posts)}"
+              class="text-center text-base-content/50 py-8"
+            >
+              No posts yet. Be the first to share something!
+            </p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

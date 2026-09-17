@@ -28,13 +28,13 @@ package: ## Build the application JAR with minified Tailwind CSS
 install: ## Build and install the artifact locally
 	$(MVNW) install
 
-run: ## Run Spring Boot and watch Tailwind CSS + the Jimp editor bundle
+run: ## Run Spring Boot and watch Tailwind CSS + the Jimp editor bundle, reading credentials from .env
 	npx concurrently --kill-others \
 		-n "tailwind,jimp,spring" \
 		-c "cyan,magenta,green" \
 		"npm run watch:css" \
 		"npm run watch:js:jimp" \
-		"${MVNW} spring-boot:run"
+		"set -a && . ./.env && set +a && ${MVNW} spring-boot:run"
 
 db-up: ## Creates the test and dev dbs locally for the app
 	createdb ${DEV_DB} 2>/dev/null || true

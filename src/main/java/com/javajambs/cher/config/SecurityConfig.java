@@ -24,8 +24,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .failureUrl("/login?error")
                         .successHandler(
-                                (request, response, authentication) -> hxAwareRedirect(request, response, "/dashboard"))
-                        .defaultSuccessUrl("/profile", true)
+                                (request, response, authentication) -> hxAwareRedirect(request, response, "/profile"))
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
