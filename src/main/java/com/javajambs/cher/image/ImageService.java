@@ -1,74 +1,115 @@
 package com.javajambs.cher.image;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.azure.identity.DefaultAzureCredential;
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobContainerClientBuilder;
+import com.azure.storage.blob.models.BlobHttpHeaders;
+
 @Service
 public class ImageService {
-    @Value("${file.upload-dir}")
-    private String uploadDir;
 
-    /**
-     * Tries to upload an image into an instance folder, returns the
-     * generated filename of the uploaded image
-     */
+    private final BlobContainerClient containerClient;
+
+    @Autowired
+    public ImageService(
+            @Value("${azure.storage.blob.account-name}") String accountName,
+            @Value("${azure.storage.blob.container-name}") String containerName) {
+
+        DefaultAzureCredential credential =
+                new DefaultAzureCredentialBuilder().build();
+
+        String endpoint = "https://" + accountName + ".blob.core.windows.net";
+
+        this.containerClient = new BlobContainerClientBuilder()
+                .endpoint(endpoint)
+                .credential(credential)
+                .containerName(containerName)
+                .buildClient();
+    }
+
+    ImageService(BlobContainerClient containerClient) {
+        this.containerClient = containerClient;
+    }
+
+    private static void requireNoPathTraversal(String segment, String label) throws IOException {
+        if (segment == null || segment.isBlank()
+                || segment.contains("..") || segment.startsWith("/") || segment.contains("\\")) {
+            throw new IOException("Invalid " + label + ": " + segment);
+        }
+    }
+
     public String uploadImage(
             String path,
             MultipartFile file) throws IOException {
-        Path uploadsRoot = resolveUploadsRoot();
-        Path absolute = uploadsRoot.resolve(path).normalize();
 
-        if (!absolute.startsWith(uploadsRoot)) {
-            throw new IOException("Invalid image path: " + path);
-        }
-
-        File baseDir = absolute.toFile();
-        if (!baseDir.exists()) {
-            baseDir.mkdirs();
-        }
+        requireNoPathTraversal(path, "path");
 
         String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || originalFilename.lastIndexOf(".") == -1) {
+
+        if (originalFilename == null ||
+                originalFilename.lastIndexOf(".") == -1) {
             throw new IOException("Uploaded file must have an extension");
         }
-        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-        String uniqueFilename = UUID.randomUUID().toString() + extension;
+        String extension =
+                originalFilename.substring(originalFilename.lastIndexOf("."));
 
-        Path targetPath = absolute.resolve(uniqueFilename);
-        Files.copy(file.getInputStream(), targetPath);
+        String uniqueFilename =
+                UUID.randomUUID() + extension;
+
+        String blobName = path + "/" + uniqueFilename;
+
+        BlobClient blobClient =
+                containerClient.getBlobClient(blobName);
+
+        blobClient.upload(
+                file.getInputStream(),
+                file.getSize(),
+                true
+        );
+
+        String contentType = file.getContentType();
+
+        if (contentType != null) {
+            blobClient.setHttpHeaders(
+                    new BlobHttpHeaders()
+                            .setContentType(contentType)
+            );
+        }
 
         return uniqueFilename;
     }
 
-    public Resource loadImage(String path, String filename) throws IOException {
-        Path uploadsRoot = resolveUploadsRoot();
-        Path baseDir = uploadsRoot.resolve(path).normalize();
-        Path targetPath = baseDir.resolve(filename).normalize();
+    public Resource loadImage(
+            String path,
+            String filename) throws IOException {
 
-        if (!baseDir.startsWith(uploadsRoot) || !targetPath.startsWith(baseDir)) {
-            throw new IOException("Invalid image path: " + path + "/" + filename);
-        }
+        requireNoPathTraversal(path, "path");
+        requireNoPathTraversal(filename, "filename");
 
-        Resource resource = new UrlResource(targetPath.toUri());
-        if (!resource.exists() || !resource.isReadable()) {
+        String blobName = path + "/" + filename;
+
+        BlobClient blobClient =
+                containerClient.getBlobClient(blobName);
+
+        if (!blobClient.exists()) {
             throw new IOException("Could not read image: " + filename);
         }
 
-        return resource;
-    }
+        byte[] data = blobClient.downloadContent().toBytes();
 
-    private Path resolveUploadsRoot() {
-        return Paths.get(System.getProperty("user.dir")).resolve(uploadDir).normalize();
+        return new ByteArrayResource(data);
     }
 }
