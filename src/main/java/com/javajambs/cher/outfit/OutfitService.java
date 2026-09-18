@@ -74,7 +74,7 @@ public class OutfitService {
         outfitRepository.delete(outfit);
     }
 
-    public Outfit geOutfitForEdit(Long outfitId, User requestingUser) throws AccessDeniedException {
+    public Outfit getOutfitForEdit(Long outfitId, User requestingUser) throws AccessDeniedException {
         return getOwnedOutfit(outfitId, requestingUser);
     }
 
