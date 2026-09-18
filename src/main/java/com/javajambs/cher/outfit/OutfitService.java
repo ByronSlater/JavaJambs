@@ -36,7 +36,7 @@ public class OutfitService {
     }
 
     public List<Outfit> getOutfitsByOutfits(User user, String outfitName) {
-        return outfitRepository.findByUserAndType(user, outfitName);
+        return outfitRepository.findByUserAndOutfitName(user, outfitName);
     }
 
     public Outfit addOutfit(
