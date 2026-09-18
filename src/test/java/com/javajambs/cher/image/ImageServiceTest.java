@@ -2,39 +2,43 @@ package com.javajambs.cher.image;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIOException;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.util.ReflectionTestUtils;
+
+import com.azure.core.util.BinaryData;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
 
 class ImageServiceTest {
 
     private ImageService imageService;
-
-    @TempDir
-    Path tempDir;
+    private BlobContainerClient containerClient;
+    private BlobClient blobClient;
 
     @BeforeEach
     void setUp() {
-        imageService = new ImageService();
-        ReflectionTestUtils.setField(imageService, "uploadDir", tempDir.toString());
+        containerClient = mock(BlobContainerClient.class);
+        blobClient = mock(BlobClient.class);
+        when(containerClient.getBlobClient(anyString())).thenReturn(blobClient);
+
+        imageService = new ImageService(containerClient);
     }
 
     @Test
-    void uploadImage_savesFileAndReturnsGeneratedFilenameWithOriginalExtension() throws IOException {
+    void uploadImage_uploadsFileAndReturnsGeneratedFilenameWithOriginalExtension() throws IOException {
         MockMultipartFile file = new MockMultipartFile("image", "cat.png", "image/png", "image-bytes".getBytes());
 
         String filename = imageService.uploadImage("avatars", file);
 
         assertThat(filename).endsWith(".png");
-        assertThat(tempDir.resolve("avatars").resolve(filename)).exists();
     }
 
     @Test
@@ -59,11 +63,11 @@ class ImageServiceTest {
     }
 
     @Test
-    void loadImage_returnsReadableResourceForAnUploadedFile() throws IOException {
-        MockMultipartFile file = new MockMultipartFile("image", "cat.png", "image/png", "image-bytes".getBytes());
-        String filename = imageService.uploadImage("avatars", file);
+    void loadImage_returnsReadableResourceForAnExistingBlob() throws IOException {
+        when(blobClient.exists()).thenReturn(true);
+        when(blobClient.downloadContent()).thenReturn(BinaryData.fromBytes("image-bytes".getBytes()));
 
-        Resource resource = imageService.loadImage("avatars", filename);
+        Resource resource = imageService.loadImage("avatars", "cat.png");
 
         assertThat(resource.exists()).isTrue();
         assertThat(resource.isReadable()).isTrue();
@@ -81,8 +85,8 @@ class ImageServiceTest {
     }
 
     @Test
-    void loadImage_throwsWhenFileDoesNotExist() throws IOException {
-        Files.createDirectories(tempDir.resolve("avatars"));
+    void loadImage_throwsWhenBlobDoesNotExist() {
+        when(blobClient.exists()).thenReturn(false);
 
         assertThatIOException().isThrownBy(() -> imageService.loadImage("avatars", "does-not-exist.png"));
     }
