@@ -168,6 +168,8 @@
 			<artifactId>playwright</artifactId>
 			<version>4.13.0</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.azure</groupId>
 			<artifactId>azure-storage-blob</artifactId>
 			<version>12.30.0</version>
