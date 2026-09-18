@@ -1,7 +1,6 @@
 package com.javajambs.cher.image;
 
 import java.io.IOException;
-import java.nio.file.Files;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -29,6 +28,7 @@ public class ImageController {
     public String uploadImage(
             @RequestParam("image") MultipartFile file,
             @RequestParam(value = "path", defaultValue = "misc") String path) throws IOException {
+
         String filename = imageService.uploadImage(path, file);
         String url = "/img/%s/%s".formatted(path, filename);
 
@@ -40,13 +40,24 @@ public class ImageController {
     public ResponseEntity<Resource> getImage(
             @PathVariable String path,
             @PathVariable String filename) throws IOException {
+
         Resource resource = imageService.loadImage(path, filename);
-        String contentType = Files.probeContentType(resource.getFile().toPath());
+
+        MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
+
+        if (filename.toLowerCase().endsWith(".png")) {
+            mediaType = MediaType.IMAGE_PNG;
+        } else if (filename.toLowerCase().endsWith(".jpg")
+                || filename.toLowerCase().endsWith(".jpeg")) {
+            mediaType = MediaType.IMAGE_JPEG;
+        } else if (filename.toLowerCase().endsWith(".gif")) {
+            mediaType = MediaType.IMAGE_GIF;
+        } else if (filename.toLowerCase().endsWith(".webp")) {
+            mediaType = MediaType.parseMediaType("image/webp");
+        }
 
         return ResponseEntity.ok()
-                .contentType(contentType != null
-                        ? MediaType.parseMediaType(contentType)
-                        : MediaType.APPLICATION_OCTET_STREAM)
+                .contentType(mediaType)
                 .body(resource);
     }
 }
