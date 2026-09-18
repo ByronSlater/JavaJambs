@@ -111,7 +111,7 @@ public class OutfitController {
             }
         
         try {
-            outfitService.addOutfit(user, outfitName, clothesIds, image); 
+            outfitService.updateOutfit(id, user, outfitName, clothesIds, image); 
         } catch(IOException e) {
             model.addAttribute("outfitError", "Sorry! Could not upload that photo.  Please, try again.");
             return "outfit/edit";
