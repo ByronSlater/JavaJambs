@@ -10,6 +10,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+<<<<<<<HEAD=======
+import com.azure.identity.DefaultAzureCredential;>>>>>>>0130d fb(Blob storage integration)
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
@@ -24,20 +26,17 @@ public class ImageService {
     @Autowired
     public ImageService(
             @Value("${azure.storage.blob.account-name}") String accountName,
-            @Value("${azure.storage.blob.container-name}") String containerName,
-            @Value("${azure.storage.blob.connection-string:}") String connectionString) {
+            @Value("${azure.storage.blob.container-name}") String containerName) {
 
-        BlobContainerClientBuilder builder = new BlobContainerClientBuilder()
-                .containerName(containerName);
+        DefaultAzureCredential credential = new DefaultAzureCredentialBuilder().build();
 
-        if (!connectionString.isBlank()) {
-            builder.connectionString(connectionString);
-        } else {
-            builder.endpoint("https://" + accountName + ".blob.core.windows.net")
-                    .credential(new DefaultAzureCredentialBuilder().build());
-        }
+        String endpoint = "https://" + accountName + ".blob.core.windows.net";
 
-        this.containerClient = builder.buildClient();
+        this.containerClient = new BlobContainerClientBuilder()
+                .endpoint(endpoint)
+                .credential(credential)
+                .containerName(containerName)
+                .buildClient();
     }
 
     ImageService(BlobContainerClient containerClient) {
@@ -64,30 +63,25 @@ public class ImageService {
             throw new IOException("Uploaded file must have an extension");
         }
 
-        String extension =
-                originalFilename.substring(originalFilename.lastIndexOf("."));
+        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-        String uniqueFilename =
-                UUID.randomUUID() + extension;
+        String uniqueFilename = UUID.randomUUID() + extension;
 
         String blobName = path + "/" + uniqueFilename;
 
-        BlobClient blobClient =
-                containerClient.getBlobClient(blobName);
+        BlobClient blobClient = containerClient.getBlobClient(blobName);
 
         blobClient.upload(
                 file.getInputStream(),
                 file.getSize(),
-                true
-        );
+                true);
 
         String contentType = file.getContentType();
 
         if (contentType != null) {
             blobClient.setHttpHeaders(
                     new BlobHttpHeaders()
-                            .setContentType(contentType)
-            );
+                            .setContentType(contentType));
         }
 
         return uniqueFilename;
@@ -102,8 +96,7 @@ public class ImageService {
 
         String blobName = path + "/" + filename;
 
-        BlobClient blobClient =
-                containerClient.getBlobClient(blobName);
+        BlobClient blobClient = containerClient.getBlobClient(blobName);
 
         if (!blobClient.exists()) {
             throw new IOException("Could not read image: " + filename);
