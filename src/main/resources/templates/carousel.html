@@ -17,17 +17,43 @@
         </p>
       </section>
 
-      <div class="flex flex-col -gap-[50px] bg-base-300 items-center w-full">
+      <div class="flex flex-col bg-[#888] items-center w-full">
         <th:block th:each="closet : ${closets}">
           <div
-            class="carousel carousel-center rounded-box max-w-35 gap-10"
+            class="carousel carousel-center carousel__cher rounded-box w-full px-[50%] h-[200px]"
             data-carousel
           >
-            <div th:each="item, iter : ${closet.items}" class="carousel-item">
+            <div
+              th:each="item, iter : ${closet.items}"
+              class="carousel-item shrinky"
+            >
               <img
                 th:src="@{${item.url}}"
                 th:width="${item.size}"
                 th:height="${item.size}"
+                class="object-cover"
+              />
+            </div>
+            <div
+              th:each="item, iter : ${closet.items}"
+              class="carousel-item shrinky"
+            >
+              <img
+                th:src="@{${item.url}}"
+                th:width="${item.size}"
+                th:height="${item.size}"
+                class="object-cover"
+              />
+            </div>
+            <div
+              th:each="item, iter : ${closet.items}"
+              class="carousel-item shrinky"
+            >
+              <img
+                th:src="@{${item.url}}"
+                th:width="${item.size}"
+                th:height="${item.size}"
+                class="object-cover"
               />
             </div>
           </div>
