@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{base.html}"
+>
+  <head>
+    <title>Calendar</title>
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <main class="flex justify-center">
+        <div class="w-full max-w-3xl">
+          <!-- Heading -->
+          <div class="mb-8 flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm text-base-content/50">Plan ahead</p>
+              <h1 class="text-3xl md:text-4xl font-bold" th:text="${monthLabel}">
+                Month Year
+              </h1>
+            </div>
+
+            <div class="flex items-center gap-1">
+              <a
+                th:href="@{/calendar(year=${prevYear}, month=${prevMonth})}"
+                aria-label="Previous month"
+                class="btn btn-ghost btn-circle"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M15 18l-6-6 6-6"></path>
+                </svg>
+              </a>
+              <a
+                th:href="@{/calendar(year=${nextYear}, month=${nextMonth})}"
+                aria-label="Next month"
+                class="btn btn-ghost btn-circle"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M9 18l6-6-6-6"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+
+          <div
+            class="grid grid-cols-7 mb-2 text-center text-xs font-medium text-base-content/50"
+          >
+            <span>Sun</span>
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+          </div>
+
+          <!-- Month grid -->
+          <div class="grid grid-cols-7 gap-1 md:gap-2" id="calendar-grid">
+            <button
+              type="button"
+              th:each="day : ${days}"
+              th:with="themeClass=${day.hasTheme('work')} ? 'bg-linear-to-br from-success/25 to-success/5' : (${day.hasTheme('social')} ? 'bg-linear-to-br from-secondary/25 to-secondary/5' : '')"
+              th:hx-get="@{/calendar/day/{date}(date=${day.date})}"
+              hx-target="#day-modal-content"
+              hx-swap="innerHTML"
+              hx-select="#calendar-day-fragment"
+              onclick="document.getElementById('day-modal').showModal()"
+              class="relative flex flex-col items-center gap-1 aspect-square rounded-box border border-base-300 p-1 md:p-2 hover:bg-base-200 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              th:classappend="${(day.inCurrentMonth ? '' : 'opacity-40 ') + themeClass}"
+            >
+              <span
+                class="text-sm font-medium"
+                th:classappend="${day.isToday} ? 'flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-content' : ''"
+                th:text="${day.date.dayOfMonth}"
+              >
+                1
+              </span>
+
+              <div
+                th:if="${!#lists.isEmpty(day.plannedOutfits)}"
+                class="flex flex-wrap gap-0.5 justify-center"
+              >
+                <span
+                  th:each="planned, iter : ${day.plannedOutfits}"
+                  th:if="${iter.index lt 3}"
+                  class="w-1.5 h-1.5 rounded-full bg-accent"
+                ></span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <!-- Day modal -->
+      <dialog id="day-modal" class="modal">
+        <div class="modal-box relative" id="day-modal-content">
+          <p class="text-base-content/60">Loading…</p>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
+
+      <!--
+        The month grid is rendered once, server-side, when this page loads.
+        Adding/removing a planned outfit only swaps the modal's own content,
+        so the grid's day-cell tints and dots would otherwise stay stale
+        until the page is reloaded. Refresh just the grid whenever the
+        dialog closes, however it closed (X button, backdrop click, Esc).
+      -->
+      <script>
+        ;(() => {
+          document.getElementById('day-modal').addEventListener('close', () => {
+            fetch(window.location.pathname + window.location.search)
+              .then((response) => response.text())
+              .then((html) => {
+                const freshGrid = new DOMParser()
+                  .parseFromString(html, 'text/html')
+                  .getElementById('calendar-grid')
+                const currentGrid = document.getElementById('calendar-grid')
+
+                if (freshGrid && currentGrid) {
+                  currentGrid.replaceWith(freshGrid)
+                  htmx.process(freshGrid)
+                }
+              })
+          })
+        })()
+      </script>
+    </div>
+  </body>
+</html>
