@@ -8,3 +8,37 @@
 @import "./themes.css";
 
 @source "../../templates/**/*.html";
+
+:root {
+  --carousel__smaller: 0;
+  --carousel__faded: 0;
+}
+
+@keyframes shrink-and-grow {
+  0% {
+    transform: scale(var(--carousel__smaller)) translateX(500px) translateZ(-800px) rotateY(45deg);
+    opacity: var(--carousel__faded);
+  }
+
+  50% {
+    transform: scale(1) translateX(0px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(var(--carousel__smaller)) translateX(-500px) translateZ(-800px) rotateY(-45deg);
+    opacity: var(--carousel__faded)
+  }
+}
+
+.carousel__cher {
+  perspective: 1000px;
+  perspective-origin: center;
+}
+
+.shrinky {
+  view-timeline: --item-visible inline;
+
+  animation: shrink-and-grow linear both;
+  animation-timeline: --item-visible;
+}
