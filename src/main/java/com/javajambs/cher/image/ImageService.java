@@ -10,7 +10,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.azure.identity.DefaultAzureCredential;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
@@ -25,18 +24,20 @@ public class ImageService {
     @Autowired
     public ImageService(
             @Value("${azure.storage.blob.account-name}") String accountName,
-            @Value("${azure.storage.blob.container-name}") String containerName) {
+            @Value("${azure.storage.blob.container-name}") String containerName,
+            @Value("${azure.storage.blob.connection-string:}") String connectionString) {
 
-        DefaultAzureCredential credential =
-                new DefaultAzureCredentialBuilder().build();
+        BlobContainerClientBuilder builder = new BlobContainerClientBuilder()
+                .containerName(containerName);
 
-        String endpoint = "https://" + accountName + ".blob.core.windows.net";
+        if (!connectionString.isBlank()) {
+            builder.connectionString(connectionString);
+        } else {
+            builder.endpoint("https://" + accountName + ".blob.core.windows.net")
+                    .credential(new DefaultAzureCredentialBuilder().build());
+        }
 
-        this.containerClient = new BlobContainerClientBuilder()
-                .endpoint(endpoint)
-                .credential(credential)
-                .containerName(containerName)
-                .buildClient();
+        this.containerClient = builder.buildClient();
     }
 
     ImageService(BlobContainerClient containerClient) {
