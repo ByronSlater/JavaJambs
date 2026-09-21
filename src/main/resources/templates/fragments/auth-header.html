@@ -6,10 +6,13 @@
   <a th:replace="~{fragments/header :: logo}"></a>
 
 
+
+
   <div class="flex items-center gap-1 sm:gap-2">
     <!-- Calendar -->
+    <th:block sec:authorize="isAuthenticated()">
     <a
-            href="#"
+            href="/calendar"
             aria-label="Calendar"
             title="Calendar"
             class="btn btn-ghost btn-circle"
@@ -31,8 +34,10 @@
         <path d="M16 3v4M8 3v4M3 10h18"></path>
       </svg>
     </a>
+    </th:block>
 
     <!-- Notifications -->
+    <th:block sec:authorize="isAuthenticated()">
     <a
             href="/notifications"
             aria-label="Notifications"
@@ -56,6 +61,7 @@
         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
       </svg>
     </a>
+    </th:block>
 
     <!-- Theme switcher -->
     <div class="dropdown dropdown-end">
