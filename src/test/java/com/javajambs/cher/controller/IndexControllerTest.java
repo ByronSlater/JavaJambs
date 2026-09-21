@@ -43,6 +43,6 @@ class IndexControllerTest {
     void index_returnsMainView() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("main"));
+                .andExpect(view().name("redirect:/dashboard"));
     }
 }
