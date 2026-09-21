@@ -54,6 +54,9 @@ class UserControllerTest {
     @MockitoBean
     private UserService userService;
 
+    @MockitoBean
+    private UserRepository userRepository;
+
     @TestConfiguration
     static class NoOpViewResolverConfig {
         @Bean
