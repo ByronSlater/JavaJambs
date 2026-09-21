@@ -78,7 +78,7 @@ class AuthControllerTest {
                 .param("email", "byron@example.com"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"))
-                .andExpect(model().attributeHasFieldErrors("registerRequest", "username"));
+                .andExpect(model().attributeHasFieldErrors("registerForm", "username"));
 
         verify(userService, never()).registerUser(any(), any(), any());
     }
@@ -94,6 +94,6 @@ class AuthControllerTest {
                 .param("email", "byron@example.com"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"))
-                .andExpect(model().attributeHasFieldErrors("registerRequest", "username"));
+                .andExpect(model().attributeHasFieldErrors("registerForm", "username"));
     }
 }
