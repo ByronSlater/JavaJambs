@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Fragments — not rendered directly</title>
+  </head>
+  <body>
+    <div th:fragment="dayModalContent" id="calendar-day-fragment">
+      <form method="dialog">
+        <button
+          class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          aria-label="Close"
+        >
+          ✕
+        </button>
+      </form>
+
+      <h3
+        class="font-bold text-lg pr-8"
+        th:text="${#temporals.format(date, 'EEEE, d MMMM yyyy')}"
+      >
+        Monday, 1 January 2026
+      </h3>
+
+      <!-- Planned outfits for this day -->
+      <div class="mt-4">
+        <p class="text-sm font-medium text-base-content/60 mb-2">
+          Planned for this day
+        </p>
+
+        <ul
+          th:if="${!#lists.isEmpty(plannedOutfits)}"
+          class="flex flex-col gap-2"
+        >
+          <li
+            th:each="planned : ${plannedOutfits}"
+            class="flex items-center justify-between gap-3 rounded-box border border-base-300 p-2"
+            th:classappend="${planned.theme == 'work'} ? 'bg-success/10' : (${planned.theme == 'social'} ? 'bg-secondary/10' : '')"
+          >
+            <div class="flex items-center gap-2 min-w-0">
+              <span
+                th:if="${planned.theme != null}"
+                class="badge badge-sm shrink-0"
+                th:classappend="${planned.theme == 'work'} ? 'badge-success' : 'badge-secondary'"
+                th:text="${#strings.capitalize(planned.theme)}"
+              >
+                Work
+              </span>
+              <div class="min-w-0">
+                <p class="truncate" th:text="${planned.note}">
+                  Burgundy outfit
+                </p>
+                <p
+                  th:if="${planned.outfit != null}"
+                  class="text-xs text-base-content/50 truncate"
+                >
+                  Outfit:
+                  <span th:text="${planned.outfit.outfitName}">Weekend fit</span>
+                </p>
+              </div>
+            </div>
+
+            <form
+              th:action="@{/calendar/day/{date}/plans/{id}/delete(date=${date}, id=${planned.id})}"
+              th:hx-post="@{/calendar/day/{date}/plans/{id}/delete(date=${date}, id=${planned.id})}"
+              method="post"
+              hx-target="#day-modal-content"
+              hx-swap="innerHTML"
+              hx-select="#calendar-day-fragment"
+            >
+              <input
+                type="hidden"
+                th:if="${_csrf}"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"
+              />
+              <button type="submit" class="btn btn-ghost btn-sm text-error shrink-0">
+                Remove
+              </button>
+            </form>
+          </li>
+        </ul>
+
+        <p
+          th:if="${#lists.isEmpty(plannedOutfits)}"
+          class="text-sm text-base-content/50"
+        >
+          Nothing planned yet.
+        </p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Add a note -->
+      <form
+        th:action="@{/calendar/day/{date}/notes(date=${date})}"
+        th:hx-post="@{/calendar/day/{date}/notes(date=${date})}"
+        method="post"
+        hx-target="#day-modal-content"
+        hx-swap="innerHTML"
+        hx-select="#calendar-day-fragment"
+        class="flex flex-col gap-3"
+      >
+        <input
+          type="hidden"
+          th:if="${_csrf}"
+          th:name="${_csrf.parameterName}"
+          th:value="${_csrf.token}"
+        />
+
+        <div>
+          <label for="note" class="label">
+            <span class="label-text">What are you wearing?</span>
+          </label>
+          <input
+            id="note"
+            name="note"
+            type="text"
+            required
+            maxlength="280"
+            class="input input-bordered w-full"
+            placeholder="Burgundy outfit"
+          />
+        </div>
+
+        <div>
+          <label for="theme" class="label">
+            <span class="label-text">Theme</span>
+          </label>
+          <select id="theme" name="theme" class="select select-bordered w-full">
+            <option value="">No theme</option>
+            <option value="work">Work</option>
+            <option value="social">Social</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="outfitId" class="label">
+            <span class="label-text">Outfit</span>
+          </label>
+          <select
+            id="outfitId"
+            name="outfitId"
+            class="select select-bordered w-full"
+            th:disabled="${#lists.isEmpty(outfits)}"
+          >
+            <option value="">No outfit</option>
+            <option
+              th:each="outfit : ${outfits}"
+              th:value="${outfit.id}"
+              th:text="${outfit.outfitName}"
+            >
+              Weekend fit
+            </option>
+          </select>
+          <p
+            th:if="${#lists.isEmpty(outfits)}"
+            class="text-xs text-base-content/50 mt-1"
+          >
+            You don't have any saved outfits yet.
+            <a th:href="@{/outfits/new}" class="link link-primary">
+              Create one
+            </a>
+            to link it here.
+          </p>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-sm self-end">
+          Save
+        </button>
+      </form>
+    </div>
+  </body>
+</html>
