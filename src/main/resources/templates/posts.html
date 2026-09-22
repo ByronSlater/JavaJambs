@@ -5,22 +5,21 @@
         layout:decorate="~{base.html}"
 >
 <head>
-  <title>Posts</title>
+  <title>Digital Diary</title>
 </head>
 
-  <body>
-    <div layout:fragment="content">
-      <!-- Posts -->
-      <div class="flex justify-center">
-        <div class="w-full max-w-3xl">
-          <!-- Heading -->
-          <div class="mb-8">
-            <p class="text-sm text-base-content/50">Community</p>
+<body>
+<div layout:fragment="content">
+  <!-- Posts -->
+  <main class="flex justify-center">
+    <div class="w-full max-w-3xl">
+      <!-- Heading -->
+      <div class="mb-8">
 
-        <h1 class="text-3xl md:text-4xl font-bold">Posts</h1>
+        <h1 class="text-3xl md:text-4xl font-bold">Digital Diary</h1>
 
         <p class="mt-2 text-base-content/70">
-          Share an update or see what others have posted.
+          Save an outfit you love to here!
         </p>
       </div>
 
@@ -49,7 +48,7 @@
 
             <div>
               <label for="caption" class="label">
-                <span class="label-text">What's on your mind?</span>
+
               </label>
 
               <textarea
@@ -98,11 +97,11 @@
                   <div
                           class="w-10 h-10 rounded-full bg-primary text-primary-content flex items-center justify-center font-bold ring ring-primary ring-offset-base-100 ring-offset-2"
                   >
-                        <span
-                                th:text="${#strings.substring(p.user.username, 0, 1).toUpperCase()}"
-                        >
-                          U
-                        </span>
+                            <span
+                                    th:text="${#strings.substring(p.user.username, 0, 1).toUpperCase()}"
+                            >
+                              U
+                            </span>
                   </div>
                 </div>
 
@@ -122,10 +121,10 @@
 
               <div class="flex gap-2">
 
-                th:href="@{/posts/{id}/edit(id=${p.id})}"
-                class="btn btn-ghost btn-sm"
+                <a th:href="@{/posts/{id}/edit(id=${p.id})}"
+                   class="btn btn-ghost btn-sm"
                 >
-                Edit
+                  Edit
                 </a>
 
                 <form th:action="@{/posts/{id}/delete(id=${p.id})}" method="post">
@@ -155,16 +154,13 @@
             />
           </div>
         </div>
-<<<<<<< HEAD
-=======
 
         <p
                 th:if="${posts == null or #lists.isEmpty(posts)}"
                 class="text-center text-base-content/70 py-8"
         >
-          No posts yet. Be the first to share something!
+          No dairy entries yet! Upload one now
         </p>
->>>>>>> 9cfcafa (accessibility and fixes)
       </div>
     </div>
   </main>

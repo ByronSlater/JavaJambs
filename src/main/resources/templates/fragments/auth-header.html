@@ -33,32 +33,6 @@
       </a>
     </th:block>
 
-    <!-- Notifications -->
-    <th:block sec:authorize="isAuthenticated()">
-      <a
-        href="/notifications"
-        aria-label="Notifications"
-        title="Notifications"
-        class="btn btn-ghost btn-circle"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
-      </a>
-    </th:block>
 
     <!-- Theme switcher -->
     <div class="dropdown dropdown-end">
@@ -140,54 +114,48 @@
         aria-label="Account menu"
         class="btn btn-ghost rounded-field pl-1 pr-3 gap-2"
       >
+
         <!-- Profile picture + username: authenticated only -->
         <th:block sec:authorize="isAuthenticated()">
           <div
-            th:if="${#authentication.principal.profile_picture != null
-                            and !#authentication.principal.profile_picture.isEmpty()}"
-            class="avatar"
+                  th:if="${#authentication.principal.profile_picture != null
+                    and !#authentication.principal.profile_picture.isEmpty()}"
+                  class="avatar"
           >
             <div
-              class="w-10 h-10 rounded-full border-2 box-content border-accent"
+                    class="w-10 h-10 rounded-full border-2 box-content border-accent"
             >
               <img
-                th:src="${#authentication.principal.profile_picture}"
-                th:alt="${#authentication.principal.username + ' profile picture'}"
+                      th:src="${#authentication.principal.profile_picture}"
+                      th:alt="${#authentication.principal.username + ' profile picture'}"
               />
             </div>
           </div>
           <div
-            th:unless="${#authentication.principal.profile_picture != null
-                                and !#authentication.principal.profile_picture.isEmpty()}"
-            class="avatar avatar-placeholder"
+                  th:unless="${#authentication.principal.profile_picture != null
+                        and !#authentication.principal.profile_picture.isEmpty()}"
+                  class="avatar avatar-placeholder"
           >
             <div
-              class="bg-primary text-primary-content w-10 h-10 rounded-full flex items-center justify-center text-base font-bold"
+                    class="bg-primary text-primary-content w-10 h-10 rounded-full flex items-center justify-center text-base font-bold"
             >
-              <span
-                th:text="${#strings.substring(#authentication.principal.username, 0, 1).toUpperCase()}"
-              >
-                U
-              </span>
+      <span
+              th:text="${#strings.substring(#authentication.principal.username, 0, 1).toUpperCase()}"
+      >
+        U
+      </span>
             </div>
           </div>
           <span
-            class="hidden sm:inline text-base font-medium max-w-32 truncate"
-            th:text="${#authentication.principal.username}"
-            >username</span
+                  class="hidden sm:inline text-base font-medium max-w-32 truncate"
+                  th:text="${#authentication.principal.username}"
+          >username</span
           >
         </th:block>
 
-        <!-- Guests: text label only, no avatar -->
+        <!-- Guests: no avatar at all, just the dropdown label -->
         <th:block sec:authorize="!isAuthenticated()">
-          <div class="avatar avatar-placeholder">
-            <div
-              class="bg-neutral text-neutral-content w-10 h-10 rounded-full flex items-center justify-center text-base font-bold"
-            >
-              ?
-            </div>
-          </div>
-          <span class="hidden sm:inline text-base font-medium">Account</span>
+          <span class="text-base font-medium">Explore FitForAll</span>
         </th:block>
 
         <svg
@@ -220,20 +188,9 @@
         </li>
 
         <!-- Primary nav, folded in below md -->
-        <li class="w-full">
-          <a th:href="@{/home}">Dashboard</a>
-        </li>
-        <li class="w-full">
-          <a th:href="@{/explore}">Explore</a>
-        </li>
-        <li class="w-full">
-          <a href="#">Your wardrobe</a>
-        </li>
-        <li class="w-full">
-          <a th:href="@{/posts}">Posts</a>
-        </li>
 
         <div class="divider w-full my-1"></div>
+        <th:block sec:authorize="isAuthenticated()">
 
         <li class="w-full"><a th:href="@{/profile}">Profile</a></li>
         <li class="w-full"><a th:href="@{/profile/edit}">Edit profile</a></li>
@@ -245,7 +202,7 @@
         <div class="divider w-full my-1"></div>
         <li class="w-full"><a th:href="@{/posts}">Vibe</a></li>
 
-        <th:block sec:authorize="isAuthenticated()">
+
           <li class="w-full">
             <form th:action="@{/logout}" method="post">
               <button type="submit" class="w-full text-left">Logout</button>
