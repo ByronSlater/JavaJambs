@@ -293,6 +293,11 @@
             			</goals>
         			</execution>
     			</executions>
+    			<configuration>
+    				<excludes>
+    					<exclude>com/javajambs/cher/CherApplication.class</exclude>
+    				</excludes>
+    			</configuration>
 			</plugin>
 		</plugins>
 	</build>
