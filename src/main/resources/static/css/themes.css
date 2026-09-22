@@ -83,4 +83,5 @@
        this even in dark mode, since its dark linework/text would
        vanish against the dark base colors otherwise. */
    --color-logo-bg: #F9FAF7;
+
 }

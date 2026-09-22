@@ -1,139 +1,143 @@
+
+
+Header · HTML
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <title>Fragments — not rendered directly</title>
-  </head>
-  <body>
-    <!--
-  Logo block: icon always shown, wordmark appears at sm+, and the
-  wordmark swaps to the tagline version at lg+ once there's room.
-  Clicking always navigates back to the landing page.
+<head>
+  <title>Fragments — not rendered directly</title>
+</head>
+<body>
+<!--
+Logo block: icon always shown, wordmark appears at sm+, and the
+wordmark swaps to the tagline version at lg+ once there's room.
+Clicking always navigates back to the landing page.
 
-  All three PNGs (icon, text-only, text-with-tagline) get the same
-  light backdrop chip, since the dark-green artwork in each needs it
-  to stay readable on the dark theme.
+All three PNGs (icon, text-only, text-with-tagline) get the same
+light backdrop chip, since the dark-green artwork in each needs it
+to stay readable on the dark theme.
 -->
-    <a
-      th:fragment="logo"
-      th:href="@{/dashboard}"
-      class="flex items-center gap-3"
-    >
-      <div class="rounded-box p-2">
-        <img
-          th:src="@{/images/new-logo-icon.png}"
-          alt=""
-          class="h-16 w-auto object-contain"
-        />
-      </div>
+<a
+        th:fragment="logo"
+        th:href="@{/home}"
+        class="flex items-center gap-3"
+>
+  <div class="rounded-box p-2" style="background-color: var(--color-logo-bg)">
+    <img
+            th:src="@{/images/new-logo-icon.png}"
+            alt=""
+            class="h-16 w-auto object-contain"
+    />
+  </div>
 
-      <!-- sm–lg: wordmark only -->
-      <div class="hidden sm:flex rounded-box px-2 py-1">
-        <img
-          th:src="@{/images/new-logo-text-only.png}"
-          alt="FitForAll"
-          class="h-8 w-auto object-contain"
-        />
-      </div>
-    </a>
+  <!-- sm–lg: wordmark only -->
+  <div class="hidden sm:flex rounded-box px-2 py-1" style="background-color: var(--color-logo-bg)">
+    <img
+            th:src="@{/images/new-logo-text-only.png}"
+            alt="FitForAll"
+            class="h-8 w-auto object-contain"
+    />
+  </div>
+</a>
 
-    <!--
-  Guest-facing header: logo, "Hello, Guest", Register/Log in.
-  Used on the front page and any other public marketing pages.
+<!--
+Guest-facing header: logo, "Hello, Guest", Register/Log in.
+Used on the front page and any other public marketing pages.
 
-  Usage:
-    <div th:replace="~{fragments/header :: guest-header}"></div>
+Usage:
+<div th:replace="~{fragments/header :: guest-header}"></div>
 -->
-    <header
-      th:fragment="header"
-      class="flex items-center justify-between px-6 md:px-10 py-4 border-b border-base-300"
-    >
-      <a th:replace="~{fragments/header :: logo}"></a>
+<header
+        th:fragment="header"
+        class="flex items-center justify-between px-6 md:px-10 py-4 border-b border-base-300"
+>
+  <a th:replace="~{fragments/header :: logo}"></a>
 
-      <div class="dropdown dropdown-end">
-        <div
-          tabindex="0"
-          role="button"
-          class="btn btn-ghost rounded-field mx-0"
-        >
-          <svg viewBox="0 0 10 8" width="30">
-            <path
-              d="M1 1h8M1 4h 8M1 7h8"
-              stroke="currentColor"
-              stroke-width="1"
-              stroke-linecap="round"
-            />
-          </svg>
+  <div class="dropdown dropdown-end">
+    <div
+            tabindex="0"
+            role="button"
+            class="btn btn-ghost rounded-field mx-0"
+    >
+      <svg viewBox="0 0 10 8" width="30">
+        <path
+                d="M1 1h8M1 4h 8M1 7h8"
+                stroke="currentColor"
+                stroke-width="1"
+                stroke-linecap="round"
+        />
+      </svg>
+    </div>
+    <ul
+            tabindex="-1"
+            class="menu dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow-sm"
+    >
+      <li>
+        <div class="dropdown dropdown-left">
+          <div tabindex="0" role="button">Theme</div>
+          <ul
+                  tabindex="-1"
+                  class="-translate-x-2 -translate-y-3 dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-2xl"
+          >
+            <li>
+              <input
+                      type="radio"
+                      name="theme-dropdown"
+                      class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Default"
+                      value="fit-for-all-light"
+                      th:hx-post="${#authorization.expression('isAuthenticated()')} ? '/theme/fit-for-all-light' : null"
+                      hx-swap="none"
+                      oninput="localStorage.setItem('theme', 'fit-for-all-light')"
+                      onload="this.selected = true"
+              />
+            </li>
+            <li>
+              <input
+                      type="radio"
+                      name="theme-dropdown"
+                      class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Dark mode"
+                      value="fit-for-all-dark"
+                      th:hx-post="${#authorization.expression('isAuthenticated()')} ? '/theme/fit-for-all-dark' : null"
+                      hx-swap="none"
+                      oninput="localStorage.setItem('theme', 'fit-for-all-dark');"
+              />
+            </li>
+          </ul>
+          <script>
+            /**
+             * Set the correct theme dropdown to be selected on page load, located
+             * right after the html element itself for encapsulating and for speed
+             *
+             * IIFE to prevent global scope
+             */
+            ;(() => {
+              let tr = document.querySelector(
+                      `input[name="theme-dropdown"][value="${localStorage.getItem(
+                              'theme'
+                      )}"]`
+              )
+
+              if (tr) {
+                tr.checked = true
+              }
+            })()
+          </script>
         </div>
-        <ul
-          tabindex="-1"
-          class="menu dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow-sm"
-        >
-          <li>
-            <div class="dropdown dropdown-left">
-              <div tabindex="0" role="button">Theme</div>
-              <ul
-                tabindex="-1"
-                class="-translate-x-2 -translate-y-3 dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-2xl"
-              >
-                <li>
-                  <input
-                    type="radio"
-                    name="theme-dropdown"
-                    class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-                    aria-label="Default"
-                    value="fit-for-all-light"
-                    th:hx-post="${#authorization.expression('isAuthenticated()')} ? '/theme/fit-for-all-light' : null"
-                    hx-swap="none"
-                    oninput="localStorage.setItem('theme', 'fit-for-all-light')"
-                    onload="this.selected = true"
-                  />
-                </li>
-                <li>
-                  <input
-                    type="radio"
-                    name="theme-dropdown"
-                    class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-                    aria-label="Dark mode"
-                    value="fit-for-all-dark"
-                    th:hx-post="${#authorization.expression('isAuthenticated()')} ? '/theme/fit-for-all-dark' : null"
-                    hx-swap="none"
-                    oninput="localStorage.setItem('theme', 'fit-for-all-dark');"
-                  />
-                </li>
-              </ul>
-              <script>
-                /**
-                 * Set the correct theme dropdown to be selected on page load, located
-                 * right after the html element itself for encapsulating and for speed
-                 *
-                 * IIFE to prevent global scope
-                 */
-                ;(() => {
-                  let tr = document.querySelector(
-                    `input[name="theme-dropdown"][value="${localStorage.getItem(
-                      'theme'
-                    )}"]`
-                  )
-
-                  if (tr) {
-                    tr.checked = true
-                  }
-                })()
-              </script>
-            </div>
-          </li>
-          <li><a>Dashboard</a></li>
-          <li><a>Explore</a></li>
-          <th:block sec:authorize="isAuthenticated()">
-            <li><a>Your wardrobe</a></li>
-            <li><a>Profile</a></li>
-            <li><a th:href="@{/logout}">Logout</a></li>
-          </th:block>
-          <th:block sec:authorize="!isAuthenticated()">
-            <li><a>Login / Register</a></li>
-          </th:block>
-        </ul>
-      </div>
-    </header>
-  </body>
+      </li>
+      <li><a>Dashboard</a></li>
+      <li><a>Explore</a></li>
+      <th:block sec:authorize="isAuthenticated()">
+        <li><a>Your wardrobe</a></li>
+        <li><a>Profile</a></li>
+        <li><a th:href="@{/logout}">Logout</a></li>
+      </th:block>
+      <th:block sec:authorize="!isAuthenticated()">
+        <li><a>Login / Register</a></li>
+      </th:block>
+    </ul>
+  </div>
+</header>
+</body>
 </html>
+

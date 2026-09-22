@@ -1,115 +1,122 @@
 <!DOCTYPE html>
 <html
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{base.html}"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{base.html}"
 >
-  <head>
-    <title>Login</title>
-  </head>
+<head>
+  <title>Login</title>
+</head>
 
-  <body>
-    <div layout:fragment="content">
-      <div class="grid md:grid-cols-2 flex-1">
-        <!-- Left: promo panel, stays on the dark theme -->
-        <div
-          class="flex flex-col items-center justify-center gap-5 px-10 py-16"
+<body>
+<div layout:fragment="content">
+  <div class="grid md:grid-cols-2 flex-1">
+    <!-- Left: promo panel, stays on the dark theme -->
+    <div
+            class="flex flex-col items-center justify-center gap-5 px-10 py-16"
+    >
+      <button
+              type="button"
+              aria-label="add Home"
+              class="btn btn-circle btn-outline w-20 h-20 border-base-content/40 text-base-content text-4xl hover:bg-base-content hover:text-base-100"
+      >
+        ⌂
+      </button>
+      <h2 class="text-2xl font-semibold text-base-content">Welcome back</h2>
+      <p class="text-base-content/70 text-center max-w-xs">
+        Log in to see your closets, items and outfits right where you left
+        them.
+      </p>
+    </div>
+
+    <!-- Right: login form, switches to the light theme -->
+    <div class="bg-base-100">
+      <div
+              class="h-full flex flex-col justify-center px-8 py-12 md:px-14 max-w-md mx-auto w-full gap-5"
+      >
+        <div>
+          <h1 class="text-3xl font-bold text-base-content">Log in</h1>
+        </div>
+
+        <form
+                th:action="@{/login}"
+                th:object="${loginForm}"
+                method="post"
+                class="flex flex-col gap-4"
+                novalidate
         >
-          <button
-            type="button"
-            aria-label="add Home"
-            class="btn btn-circle btn-outline w-20 h-20 border-base-content/40 text-base-content text-4xl hover:bg-base-content hover:text-base-100"
-          >
-            ⌂
-          </button>
-          <h2 class="text-2xl font-semibold text-base-content">Welcome back</h2>
-          <p class="text-base-content/60 text-center max-w-xs">
-            Log in to see your closets, items and outfits right where you left
-            them.
-          </p>
-        </div>
-
-        <!-- Right: login form, switches to the light theme -->
-        <div class="bg-base-100">
           <div
-            class="h-full flex flex-col justify-center px-8 py-12 md:px-14 max-w-md mx-auto w-full gap-5"
+                  th:if="${loginError}"
+                  role="alert"
+                  class="alert alert-error text-sm"
           >
-            <div>
-              <h1 class="text-3xl font-bold text-base-content">Log in</h1>
-            </div>
-
-            <form
-              th:action="@{/login}"
-              th:object="${loginForm}"
-              method="post"
-              class="flex flex-col gap-4"
-            >
-              <div
-                th:if="${loginError}"
-                role="alert"
-                class="alert alert-error text-sm"
-              >
-                <span th:text="${loginError}">Something went wrong.</span>
-              </div>
-
-              <fieldset class="fieldset flex flex-col gap-1">
-                <label class="label" for="username">Username</label>
-                <input
-                  id="username"
-                  th:field="*{username}"
-                  type="text"
-                  placeholder="yourusername"
-                  th:classappend="${#fields.hasErrors('username')} ? 'input-error'"
-                  class="input w-full"
-                />
-                <span
-                  class="text-error text-xs"
-                  th:if="${#fields.hasErrors('username')}"
-                  th:errors="*{username}"
-                  >Username error</span
-                >
-              </fieldset>
-
-              <fieldset class="fieldset flex flex-col gap-1">
-                <label class="label" for="password">Password</label>
-                <input
-                  id="password"
-                  th:field="*{password}"
-                  type="password"
-                  th:classappend="${#fields.hasErrors('password')} ? 'input-error'"
-                  class="input w-full"
-                />
-                <span
-                  class="text-error text-xs"
-                  th:if="${#fields.hasErrors('password')}"
-                  th:errors="*{password}"
-                  >Password error</span
-                >
-              </fieldset>
-
-              <button type="submit" class="btn btn-neutral w-full">
-                Log in
-              </button>
-            </form>
-
-            <div class="divider text-xs text-base-content/50">
-              or continue with
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <a href="#" class="btn btn-outline w-full">Google</a>
-              <a href="#" class="btn btn-outline w-full">Apple</a>
-            </div>
-
-            <p class="text-center text-sm text-base-content/70">
-              New here?
-              <a th:href="@{/register}" class="link link-primary font-medium"
-                >Create an account</a
-              >
-            </p>
+            <span th:text="${loginError}">Something went wrong.</span>
           </div>
+
+          <fieldset class="fieldset flex flex-col gap-1">
+            <label class="label" for="username">Username</label>
+            <input
+                    id="username"
+                    th:field="*{username}"
+                    type="text"
+                    placeholder="yourusername"
+                    th:classappend="${usernameFieldError} ? 'input-error'"
+                    th:aria-invalid="${usernameFieldError} ? 'true'"
+                    th:aria-describedby="${usernameFieldError} ? 'username-error'"
+                    class="input w-full"
+            />
+            <span
+                    id="username-error"
+                    class="text-error text-xs"
+                    th:if="${usernameFieldError}"
+                    th:text="${usernameFieldError}"
+            >Username error</span
+            >
+          </fieldset>
+
+          <fieldset class="fieldset flex flex-col gap-1">
+            <label class="label" for="password">Password</label>
+            <input
+                    id="password"
+                    th:field="*{password}"
+                    type="password"
+                    th:classappend="${passwordFieldError} ? 'input-error'"
+                    th:aria-invalid="${passwordFieldError} ? 'true'"
+                    th:aria-describedby="${passwordFieldError} ? 'password-error'"
+                    class="input w-full"
+            />
+            <span
+                    id="password-error"
+                    class="text-error text-xs"
+                    th:if="${passwordFieldError}"
+                    th:text="${passwordFieldError}"
+            >Password error</span
+            >
+          </fieldset>
+
+          <button type="submit" class="btn btn-neutral w-full">
+            Log in
+          </button>
+        </form>
+
+        <div class="divider text-xs text-base-content/70">
+          or continue with
         </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <a href="#" class="btn btn-outline w-full">Google</a>
+          <a href="#" class="btn btn-outline w-full">Apple</a>
+        </div>
+
+        <p class="text-center text-sm text-base-content/70">
+          New here?
+          <a th:href="@{/register}" class="link link-primary font-medium"
+          >Create an account</a
+          >
+        </p>
       </div>
     </div>
-  </body>
+  </div>
+</div>
+</body>
 </html>

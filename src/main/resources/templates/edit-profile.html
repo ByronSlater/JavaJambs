@@ -15,11 +15,11 @@
         <div class="w-full max-w-3xl">
           <!-- Heading -->
           <div class="mb-8">
-            <p class="text-sm text-base-content/50">Account</p>
+            <p class="text-sm text-base-content/70">Account</p>
 
             <h1 class="text-3xl md:text-4xl font-bold">Edit Profile</h1>
 
-            <p class="mt-2 text-base-content/60">
+            <p class="mt-2 text-base-content/70">
               Update your personal information.
             </p>
           </div>
@@ -42,7 +42,11 @@
                 />
 
                 <!-- Error -->
-                <div th:if="${profileError}" class="alert alert-error">
+                <div
+                  th:if="${profileError}"
+                  role="alert"
+                  class="alert alert-error"
+                >
                   <span th:text="${profileError}"></span>
                 </div>
 
@@ -104,7 +108,7 @@
                     disabled
                   />
 
-                  <p class="text-sm text-base-content/50 mt-1">
+                  <p class="text-sm text-base-content/70 mt-1">
                     Username cannot be changed.
                   </p>
                 </div>
