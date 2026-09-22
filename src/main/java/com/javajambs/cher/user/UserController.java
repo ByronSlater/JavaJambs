@@ -2,6 +2,7 @@ package com.javajambs.cher.user;
 
 import org.springframework.http.ResponseEntity;
 import java.io.IOException;
+import java.util.Set;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,26 +16,52 @@ import org.springframework.web.multipart.MultipartFile;
 import com.javajambs.cher.auth.LoginRequest;
 import com.javajambs.cher.auth.RegisterRequest;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+
 @Controller
 public class UserController {
     private final UserRepository userRepository;
     private final UserService userService;
+    private final Validator validator;
 
-    public UserController(UserService userService, UserRepository userRepository) {
+    public UserController(UserService userService, UserRepository userRepository, Validator validator) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.validator = validator;
     }
 
     @GetMapping("/login")
     public String loginPage(
             @RequestParam(required = false) String error,
+            @RequestParam(required = false) String usernameError,
+            @RequestParam(required = false) String passwordError,
             Model model) {
 
         model.addAttribute(
                 "loginForm",
                 new LoginRequest("", ""));
 
-        if (error != null) {
+        if (usernameError != null || passwordError != null) {
+            // Re-validate a blank LoginRequest to pull the real messages
+            // straight from LoginRequest's own @NotBlank annotations,
+            // rather than duplicating the wording here.
+            Set<ConstraintViolation<LoginRequest>> violations = validator.validate(new LoginRequest("", ""));
+
+            if (usernameError != null) {
+                violations.stream()
+                        .filter(v -> v.getPropertyPath().toString().equals("username"))
+                        .findFirst()
+                        .ifPresent(v -> model.addAttribute("usernameFieldError", v.getMessage()));
+            }
+
+            if (passwordError != null) {
+                violations.stream()
+                        .filter(v -> v.getPropertyPath().toString().equals("password"))
+                        .findFirst()
+                        .ifPresent(v -> model.addAttribute("passwordFieldError", v.getMessage()));
+            }
+        } else if (error != null) {
             model.addAttribute(
                     "loginError",
                     "Invalid username or password");

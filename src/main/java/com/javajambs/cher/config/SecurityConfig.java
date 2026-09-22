@@ -11,9 +11,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.javajambs.cher.auth.LoginFailureHandler;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final LoginFailureHandler loginFailureHandler;
+
+    public SecurityConfig(LoginFailureHandler loginFailureHandler) {
+        this.loginFailureHandler = loginFailureHandler;
+    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -22,9 +30,9 @@ public class SecurityConfig {
                         .anyRequest().permitAll())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .failureUrl("/login?error")
+                        .failureHandler(loginFailureHandler)
                         .successHandler(
-                                (request, response, authentication) -> hxAwareRedirect(request, response, "/profile"))
+                                (request, response, authentication) -> hxAwareRedirect(request, response, "/home"))
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")

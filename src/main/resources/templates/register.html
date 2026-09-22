@@ -1,144 +1,155 @@
 <!DOCTYPE html>
 <html
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{base.html}"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{base.html}"
 >
-  <head>
-    <title>Register</title>
-  </head>
+<head>
+  <title>Register</title>
+</head>
 
-  <body>
-    <div layout:fragment="content">
-      <!-- Body -->
-      <div class="grid md:grid-cols-2 flex-1">
-        <!-- Left: promo panel atm, stays on the dark theme -->
-        <div
-          class="flex flex-col items-center justify-center gap-5 px-10 py-16"
+<body>
+<div layout:fragment="content">
+  <!-- Body -->
+  <div class="grid md:grid-cols-2 flex-1">
+    <!-- Left: promo panel atm, stays on the dark theme -->
+    <div
+            class="flex flex-col items-center justify-center gap-5 px-10 py-16"
+    >
+      <button
+              type="button"
+              aria-label="Add item"
+              class="btn btn-circle btn-outline w-20 h-20 border-base-content/40 text-base-content text-2xl hover:bg-base-content hover:text-base-100"
+      >
+        +
+      </button>
+      <h2 class="text-2xl font-semibold text-base-content">
+        Start your wardrobe
+      </h2>
+      <p class="text-base-content/70 text-center max-w-xs">
+        Create closets, put together outfits, that is fit for all.
+      </p>
+    </div>
+
+    <!-- Right: registration form, switches to the light them -->
+    <div class="bg-base-100">
+      <div
+              class="h-full flex flex-col justify-center px-8 py-12 md:px-14 max-w-md mx-auto w-full gap-5"
+      >
+        <div>
+          <h1 class="text-3xl font-bold text-base-content">
+            Create Your Account
+          </h1>
+        </div>
+        <form
+                th:action="@{/register}"
+                th:object="${registerForm}"
+                method="post"
+                class="flex flex-col gap-4"
+                novalidate
         >
-          <button
-            type="button"
-            aria-label="Add item"
-            class="btn btn-circle btn-outline w-20 h-20 border-base-content/40 text-base-content text-2xl hover:bg-base-content hover:text-base-100"
-          >
-            +
-          </button>
-          <h2 class="text-2xl font-semibold text-base-content">
-            Start your wardrobe
-          </h2>
-          <p class="text-base-content/60 text-center max-w-xs">
-            Create closets, put together outfits, that is fit for all.
-          </p>
-        </div>
-
-        <!-- Right: registration form, switches to the light them -->
-        <div class="bg-base-100">
           <div
-            class="h-full flex flex-col justify-center px-8 py-12 md:px-14 max-w-md mx-auto w-full gap-5"
+                  th:if="${#fields.hasGlobalErrors()}"
+                  role="alert"
+                  class="alert alert-error text-sm"
           >
-            <div>
-              <h1 class="text-3xl font-bold text-base-content">
-                Create Your Account
-              </h1>
-            </div>
-            <form
-              th:action="@{/register}"
-              th:object="${registerForm}"
-              method="post"
-              class="flex flex-col gap-4"
-              novalidate
-            >
-              <div
-                th:if="${#fields.hasGlobalErrors()}"
-                role="alert"
-                class="alert alert-error text-sm"
-              >
                 <span th:each="err : ${#fields.globalErrors()}" th:text="${err}"
-                  >Something went wrong.</span
+                >Something went wrong.</span
                 >
-              </div>
-
-              <div class="grid grid-cols-2 gap-4">
-                <div class="form-control flex flex-col gap-1 col-span-2">
-                  <label class="label-text text-sm" for="username"
-                    >Username</label
-                  >
-                  <input
-                    id="username"
-                    th:field="*{username}"
-                    type="text"
-                    th:classappend="${#fields.hasErrors('username')}? 'input-error'"
-                    class="input input-bordered w-full"
-                  />
-                  <span
-                    class="text-error text-xs"
-                    th:if="${#fields.hasErrors('username')}"
-                    th:errors="*{username}"
-                    >Username error</span
-                  >
-                </div>
-
-                <div class="form-control flex flex-col gap-1 col-span-2">
-                  <label class="label-text text-sm" for="email">Email</label>
-                  <input
-                    id="email"
-                    th:field="*{email}"
-                    type="email"
-                    placeholder="you@example.com"
-                    th:classappend="${#fields.hasErrors('email')} ? 'input-error'"
-                    class="input input-bordered w-full"
-                  />
-                  <span
-                    class="text-error text-xs"
-                    th:if="${#fields.hasErrors('email')}"
-                    th:errors="*{email}"
-                    >Email error</span
-                  >
-                </div>
-
-                <div class="form-control flex flex-col gap-1 col-span-2">
-                  <label class="label-text text-sm" for="password"
-                    >Password</label
-                  >
-                  <input
-                    id="password"
-                    th:field="*{password}"
-                    type="password"
-                    th:classappend="${#fields.hasErrors('password')} ? 'input-error'"
-                    class="input input-bordered w-full"
-                  />
-                  <span
-                    class="text-error text-xs"
-                    th:if="${#fields.hasErrors('password')}"
-                    th:errors="*{password}"
-                    >Password error</span
-                  >
-                </div>
-
-                <button type="submit" class="btn btn-neutral w-full col-span-2">
-                  Create account
-                </button>
-              </div>
-            </form>
-
-            <div class="divider text-xs text-base-content/50">
-              or continue with
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <a href="#" class="btn btn-outline w-full">Google</a>
-              <a href="#" class="btn btn-outline w-full">Apple</a>
-            </div>
-
-            <p class="text-center text-sm text-base-content/70">
-              Already registered?
-              <a th:href="@{/login}" class="link link-primary font-medium"
-                >Log in</a
-              >
-            </p>
           </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-control flex flex-col gap-1 col-span-2">
+              <label class="label-text text-sm" for="username"
+              >Username</label
+              >
+              <input
+                      id="username"
+                      th:field="*{username}"
+                      type="text"
+                      th:classappend="${#fields.hasErrors('username')}? 'input-error'"
+                      th:aria-invalid="${#fields.hasErrors('username')}"
+                      th:aria-describedby="${#fields.hasErrors('username')} ? 'username-error'"
+                      class="input input-bordered w-full"
+              />
+              <span
+                      id="username-error"
+                      class="text-error text-xs"
+                      th:if="${#fields.hasErrors('username')}"
+                      th:errors="*{username}"
+              >Username error</span
+              >
+            </div>
+
+            <div class="form-control flex flex-col gap-1 col-span-2">
+              <label class="label-text text-sm" for="email">Email</label>
+              <input
+                      id="email"
+                      th:field="*{email}"
+                      type="text"
+                      inputmode="email"
+                      autocomplete="email"
+                      placeholder="you@example.com"
+                      th:classappend="${#fields.hasErrors('email')} ? 'input-error'"
+                      th:aria-invalid="${#fields.hasErrors('email')}"
+                      th:aria-describedby="${#fields.hasErrors('email')} ? 'email-error'"
+                      class="input input-bordered w-full"
+              />
+              <span
+                      id="email-error"
+                      class="text-error text-xs"
+                      th:if="${#fields.hasErrors('email')}"
+                      th:errors="*{email}"
+              >Email error</span
+              >
+            </div>
+
+            <div class="form-control flex flex-col gap-1 col-span-2">
+              <label class="label-text text-sm" for="password"
+              >Password</label
+              >
+              <input
+                      id="password"
+                      th:field="*{password}"
+                      type="password"
+                      th:classappend="${#fields.hasErrors('password')} ? 'input-error'"
+                      th:aria-invalid="${#fields.hasErrors('password')}"
+                      th:aria-describedby="${#fields.hasErrors('password')} ? 'password-error'"
+                      class="input input-bordered w-full"
+              />
+              <span
+                      id="password-error"
+                      class="text-error text-xs"
+                      th:if="${#fields.hasErrors('password')}"
+                      th:errors="*{password}"
+              >Password error</span
+              >
+            </div>
+
+            <button type="submit" class="btn btn-neutral w-full col-span-2">
+              Create account
+            </button>
+          </div>
+        </form>
+
+        <div class="divider text-xs text-base-content/70">
+          or continue with
         </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <a href="#" class="btn btn-outline w-full">Google</a>
+          <a href="#" class="btn btn-outline w-full">Apple</a>
+        </div>
+
+        <p class="text-center text-sm text-base-content/70">
+          Already registered?
+          <a th:href="@{/login}" class="link link-primary font-medium"
+          >Log in</a
+          >
+        </p>
       </div>
     </div>
-  </body>
+  </div>
+</div>
+</body>
 </html>
