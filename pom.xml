@@ -204,7 +204,7 @@
 				<executions>
 					<execution>
 						<id>build-tailwind-css</id>
-						<phase>prepare-package</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
