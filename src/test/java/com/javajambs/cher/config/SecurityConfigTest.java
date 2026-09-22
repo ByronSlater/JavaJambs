@@ -22,12 +22,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.javajambs.cher.auth.LoginFailureHandler;
 import com.javajambs.cher.controller.IndexController;
 
 
 @WebMvcTest(controllers = IndexController.class)
 @AutoConfigureMockMvc // filters stay ON (the default) - intentional, unlike sibling tests
-@Import({ SecurityConfig.class, PasswordEncoderConfig.class })
+@Import({ SecurityConfig.class, PasswordEncoderConfig.class, LoginFailureHandler.class })
 public class SecurityConfigTest {
 
     @Autowired
@@ -48,7 +49,7 @@ public class SecurityConfigTest {
     }
 
     @Test
-    void login_withValidCredentials_redirectsToProfile() throws Exception {
+    void login_withValidCredentials_redirectsToHome() throws Exception {
         stubUser("byron123", "password123");
 
         mockMvc.perform(post("/login")
@@ -56,7 +57,7 @@ public class SecurityConfigTest {
                         .param("password", "password123")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/profile"));
+                .andExpect(redirectedUrl("/home"));
     }
 
     @Test
@@ -69,7 +70,7 @@ public class SecurityConfigTest {
                         .header("HX-Request", "true")
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(header().string("HX-Redirect", "/profile"));
+                .andExpect(header().string("HX-Redirect", "/home"));
     }
 
     @Test
