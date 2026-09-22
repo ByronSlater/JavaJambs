@@ -1,5 +1,8 @@
 package com.javajambs.cher.user;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -184,5 +187,36 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("edit-profile"))
                 .andExpect(model().attributeExists("profileError"));
+    }
+
+    @Test
+    void setTheme_whenAuthenticated_savesThemeAndReturnsOk() throws Exception {
+    User user = authenticatedUser();
+
+    mockMvc.perform(post("/theme/{themeName}", "dark"))
+            .andExpect(status().isOk());
+
+    assertEquals("dark", user.getTheme());
+    verify(userRepository).save(user);
+    }
+
+    @Test
+    void setTheme_whenNotAuthenticated_throwsNullPointerException() {
+    Exception exception = assertThrows(Exception.class,
+            () -> mockMvc.perform(post("/theme/{themeName}", "dark")));
+
+    Throwable root = exception;
+    while (root.getCause() != null) {
+        root = root.getCause();
+    }
+    assertInstanceOf(NullPointerException.class, root);
+    }
+
+    @Test
+    void loginPage_withErrorParam_addsLoginErrorToModel() throws Exception {
+    mockMvc.perform(get("/login").param("error", ""))
+            .andExpect(status().isOk())
+            .andExpect(view().name("login"))
+            .andExpect(model().attribute("loginError", "Invalid username or password"));
     }
 }
