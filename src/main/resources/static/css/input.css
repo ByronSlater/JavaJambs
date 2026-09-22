@@ -9,6 +9,16 @@
 
 @source "../../templates/**/*.html";
 
+/* Accessibility: guarantee a 48x48px minimum tap target on every button.
+   daisyUI's default .btn is 40px tall and .btn-sm is 32px tall, both
+   below the recommended touch-target size - this floors every size
+   variant (including icon-only .btn-circle buttons) without changing
+   how bigger buttons already look. */
+.btn {
+  min-height: 3rem;
+  min-width: 3rem;
+}
+
 :root {
   --carousel__smaller: 0;
   --carousel__faded: 0;
