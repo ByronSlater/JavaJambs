@@ -44,6 +44,13 @@
   position: relative;
   width: 200px;
   overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   scroll-snap-type: x mandatory;
   padding: 5px 130px;
   transform-style: preserve-3d;
