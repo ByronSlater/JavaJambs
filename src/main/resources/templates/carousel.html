@@ -17,48 +17,61 @@
         </p>
       </section>
 
-      <div class="flex flex-col bg-[#888] items-center w-full">
-        <th:block th:each="closet : ${closets}">
-          <div
-            class="carousel carousel-center carousel__cher rounded-box w-full px-[50%] h-[200px]"
-            data-carousel
-          >
-            <div
-              th:each="item, iter : ${closet.items}"
-              class="carousel-item shrinky"
-            >
-              <img
-                th:src="@{${item.url}}"
-                th:width="${item.size}"
-                th:height="${item.size}"
-                class="object-cover"
-              />
+      <form th:action="@{/outfits}" method="post" id="outfit-builder">
+        <div class="flex flex-col bg-[#888] items-center w-full">
+          <th:block th:each="closet : ${closets}">
+            <div class="flex items-center gap-2 w-full">
+              <div class="carousel__viewport" th:data-carousel="${closet.type}">
+                <div th:if="${closet.items.isEmpty()}" class="carousel-item">
+                  <p
+                    class="text-sm text-base-content/60"
+                    th:text="'No ' + ${closet.label} + ' in your wardrobe yet'"
+                  ></p>
+                </div>
+
+                <div class="carousel__track">
+                  <div
+                    th:each="item : ${closet.items}"
+                    class="carousel__item"
+                    th:data-clothes-id="${item.id}"
+                  >
+                    <img
+                      th:if="${item.imageUrl != null}"
+                      th:src="@{${item.imageUrl}}"
+                      th:width="50px"
+                      th:height="50px"
+                      class="object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div
-              th:each="item, iter : ${closet.items}"
-              class="carousel-item shrinky"
-            >
-              <img
-                th:src="@{${item.url}}"
-                th:width="${item.size}"
-                th:height="${item.size}"
-                class="object-cover"
-              />
-            </div>
-            <div
-              th:each="item, iter : ${closet.items}"
-              class="carousel-item shrinky"
-            >
-              <img
-                th:src="@{${item.url}}"
-                th:width="${item.size}"
-                th:height="${item.size}"
-                class="object-cover"
-              />
-            </div>
-          </div>
-        </th:block>
-      </div>
+
+            <input
+              type="hidden"
+              name="clothesIds"
+              th:data-type="${closet.type}"
+              disabled
+            />
+          </th:block>
+        </div>
+
+        <div class="flex flex-col items-center gap-3 mt-6">
+          <input
+            type="text"
+            name="outfitName"
+            value="My Outfit"
+            required
+            class="input input-bordered"
+          />
+          <button type="submit" class="btn btn-primary">Save Outfit</button>
+        </div>
+      </form>
+
+      <script type="module">
+        import { init } from '/js/carousel-picker.js'
+        init(document.getElementById('outfit-builder'))
+      </script>
     </div>
   </body>
 </html>

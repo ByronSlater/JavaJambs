@@ -64,7 +64,7 @@ class ClothesServiceTest {
         User user = new User();
         when(clothesRepository.save(any(Clothes.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Clothes saved = clothesService.addClothingItem(user, "Denim jacket", null);
+        Clothes saved = clothesService.addClothingItem(user, "Denim jacket", null, null, null);
 
         assertThat(saved.getName()).isEqualTo("Denim jacket");
         assertThat(saved.getUser()).isEqualTo(user);
@@ -79,7 +79,7 @@ class ClothesServiceTest {
         when(imageService.uploadImage(eq("clothes"), eq(image))).thenReturn("generated.png");
         when(clothesRepository.save(any(Clothes.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Clothes saved = clothesService.addClothingItem(user, "Denim jacket", image);
+        Clothes saved = clothesService.addClothingItem(user, "Denim jacket", null, image, null);
 
         assertThat(saved.getImageUrl()).isEqualTo("/img/clothes/generated.png");
     }
@@ -89,9 +89,44 @@ class ClothesServiceTest {
         User user = new User();
         MultipartFile notAnImage = new MockMultipartFile("image", "resume.pdf", "application/pdf", "bytes".getBytes());
 
-        assertThatIOException().isThrownBy(() -> clothesService.addClothingItem(user, "Denim jacket", notAnImage));
+        assertThatIOException().isThrownBy(
+                () -> clothesService.addClothingItem(user, "Denim jacket", null, notAnImage, null));
 
         verify(clothesRepository, never()).save(any());
+    }
+
+    @Test
+    void addClothingItem_setsTypeWhenProvided() throws Exception {
+        User user = new User();
+        when(clothesRepository.save(any(Clothes.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Clothes saved = clothesService.addClothingItem(user, "Denim jacket", "top", null, null);
+
+        assertThat(saved.getType()).isEqualTo("top");
+    }
+
+    @Test
+    void addClothingItem_usesImageUrlDirectlyWhenNoFileProvided() throws Exception {
+        User user = new User();
+        when(clothesRepository.save(any(Clothes.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Clothes saved = clothesService.addClothingItem(user, "Denim jacket", null, null, "/img/clothes/edited.png");
+
+        assertThat(saved.getImageUrl()).isEqualTo("/img/clothes/edited.png");
+        verify(imageService, never()).uploadImage(any(), any());
+    }
+
+    @Test
+    void addClothingItem_prefersFreshFileUploadOverImageUrlWhenBothProvided() throws Exception {
+        User user = new User();
+        MultipartFile image = new MockMultipartFile("image", "jacket.png", "image/png", "bytes".getBytes());
+        when(imageService.uploadImage(eq("clothes"), eq(image))).thenReturn("generated.png");
+        when(clothesRepository.save(any(Clothes.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Clothes saved = clothesService.addClothingItem(
+                user, "Denim jacket", null, image, "/img/clothes/edited.png");
+
+        assertThat(saved.getImageUrl()).isEqualTo("/img/clothes/generated.png");
     }
 
     @Test

@@ -30,8 +30,14 @@ public List<Clothes> getWardrobeByType(User user, String type) {
     return clothesRepository.findByUserAndType(user, type);
 }
 
-public Clothes addClothingItem(User user, String name, MultipartFile image) throws IOException {
+public Clothes addClothingItem(
+        User user, String name, String type,
+        MultipartFile image, String imageUrl) throws IOException {
     Clothes clothes = new Clothes(name, user);
+
+    if (type != null && !type.isBlank()) {
+        clothes.setType(type);
+    }
 
     if (image != null && !image.isEmpty()) {
         String contentType = image.getContentType();
@@ -41,6 +47,8 @@ public Clothes addClothingItem(User user, String name, MultipartFile image) thro
 
         String filename = imageService.uploadImage("clothes", image);
         clothes.setImageUrl("/img/clothes/%s".formatted(filename));
+    } else if (imageUrl != null && !imageUrl.isBlank()) {
+        clothes.setImageUrl(imageUrl);
     }
 
     return clothesRepository.save(clothes);

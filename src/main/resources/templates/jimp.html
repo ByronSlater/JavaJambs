@@ -14,6 +14,8 @@
       id="jimp-editor"
       th:data-csrf-header="${_csrf.headerName}"
       th:data-csrf-token="${_csrf.token}"
+      th:data-upload-path="${path}"
+      th:data-return-to="${returnTo != null ? returnTo : ''}"
     >
       <main class="flex justify-center">
         <div class="w-full max-w-4xl">

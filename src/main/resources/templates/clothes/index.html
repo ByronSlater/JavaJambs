@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{base.html}"
+>
+  <head>
+    <title>My Clothes</title>
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <main class="flex justify-center">
+        <div class="w-full max-w-3xl">
+          <div class="mb-8 flex items-center justify-between gap-4">
+            <div>
+              <h1 class="text-3xl md:text-4xl font-bold">My Clothes</h1>
+              <p class="mt-2 text-base-content/60">
+                Everything in your wardrobe.
+              </p>
+            </div>
+
+            <a th:href="@{/clothes/new}" class="btn btn-primary shrink-0">
+              + Add clothing item
+            </a>
+          </div>
+
+          <p
+            th:if="${wardrobe == null or #lists.isEmpty(wardrobe)}"
+            class="text-center text-base-content/50 py-8"
+          >
+            No clothes yet.
+            <a th:href="@{/clothes/new}" class="link link-primary"
+              >Add your first item</a
+            >.
+          </p>
+
+          <div
+            th:if="${wardrobe != null and !#lists.isEmpty(wardrobe)}"
+            class="grid grid-cols-2 md:grid-cols-3 gap-4"
+          >
+            <div
+              th:each="item : ${wardrobe}"
+              class="card bg-base-100 border border-base-300 shadow-sm"
+            >
+              <figure th:if="${item.imageUrl != null}" class="bg-base-200">
+                <img
+                  th:src="@{${item.imageUrl}}"
+                  class="w-full h-32 object-cover"
+                />
+              </figure>
+
+              <div class="card-body p-4">
+                <h2 class="card-title text-base" th:text="${item.name}">
+                  Item
+                </h2>
+
+                <span
+                  th:if="${item.type != null}"
+                  class="badge badge-outline w-fit"
+                  th:text="${item.type}"
+                >
+                  type
+                </span>
+
+                <form
+                  th:action="@{/clothes/{id}/delete(id=${item.id})}"
+                  method="post"
+                  class="mt-2"
+                >
+                  <button type="submit" class="btn btn-ghost btn-sm text-error">
+                    Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
