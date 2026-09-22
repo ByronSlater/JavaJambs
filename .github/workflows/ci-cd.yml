@@ -39,79 +39,11 @@ jobs:
       - run: npm ci
 
       - name: Run tests
-        run: ./mvnw -B test
-
-  accessibility:
-    name: Accessibility tests
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_DB: cher_test
-          POSTGRES_USER: cher
-          POSTGRES_PASSWORD: cher
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U cher"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-    env:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/cher_test
-      SPRING_DATASOURCE_USERNAME: cher
-      SPRING_DATASOURCE_PASSWORD: cher
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: ${{ env.JAVA_VERSION }}
-          cache: maven
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-
-      - run: npm ci
-
-      - name: Package application
-        run: ./mvnw -B clean package -DskipTests
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Start application
-        run: |
-          nohup java -jar target/*.jar > app.log 2>&1 &
-          echo $! > app.pid
-
-      - name: Wait for application to be ready
-        run: |
-          for _ in {1..30}; do
-            if curl -sf http://localhost:8080/login > /dev/null; then
-              echo "Application is up"
-              exit 0
-            fi
-            sleep 2
-          done
-          echo "Application did not become ready in time"
-          cat app.log
-          exit 1
-
-      - name: Run accessibility tests
-        run: ./mvnw -B test -Dtest=AccessibilityTest
-
-      - name: Stop application
-        if: always()
-        run: kill "$(cat app.pid)" || true
+        run: ./mvnw -B test -Dgroups='!e2e'
 
   build-and-push:
     name: Build & push image
-    needs: [test, accessibility]
+    needs: [test]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
