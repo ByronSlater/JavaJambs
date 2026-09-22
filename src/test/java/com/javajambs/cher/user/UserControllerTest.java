@@ -219,4 +219,44 @@ class UserControllerTest {
             .andExpect(view().name("login"))
             .andExpect(model().attribute("loginError", "Invalid username or password"));
     }
+
+        @Test
+    void loginPage_withUsernameError_addsUsernameFieldErrorToModel() throws Exception {
+    mockMvc.perform(get("/login").param("usernameError", ""))
+            .andExpect(status().isOk())
+            .andExpect(view().name("login"))
+            .andExpect(model().attribute("usernameFieldError", "Username required"))
+            .andExpect(model().attributeDoesNotExist("passwordFieldError"));
+    }
+
+    @Test
+    void loginPage_withPasswordError_addsPasswordFieldErrorToModel() throws Exception {
+    mockMvc.perform(get("/login").param("passwordError", ""))
+            .andExpect(status().isOk())
+            .andExpect(view().name("login"))
+            .andExpect(model().attribute("passwordFieldError", "Password required"))
+            .andExpect(model().attributeDoesNotExist("usernameFieldError"));
+    }
+
+    @Test
+    void loginPage_withBothUsernameAndPasswordError_addsBothFieldErrorsToModel() throws Exception {
+    mockMvc.perform(get("/login")
+            .param("usernameError", "")
+            .param("passwordError", ""))
+            .andExpect(status().isOk())
+            .andExpect(view().name("login"))
+            .andExpect(model().attribute("usernameFieldError", "Username required"))
+            .andExpect(model().attribute("passwordFieldError", "Password required"));
+    }
+
+    @Test
+    void loginPage_withUsernameErrorAndErrorParam_doesNotAddGenericLoginError() throws Exception {
+    mockMvc.perform(get("/login")
+            .param("error", "")
+            .param("usernameError", ""))
+            .andExpect(status().isOk())
+            .andExpect(view().name("login"))
+            .andExpect(model().attribute("usernameFieldError", "Username required"))
+            .andExpect(model().attributeDoesNotExist("loginError"));
+    }
 }
