@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.microsoft.playwright.Browser;
@@ -27,6 +28,7 @@ import com.microsoft.playwright.options.AriaRole;
  * app is already running (e.g. via `make run`) against a real Postgres -
  * there is no self-booting @SpringBootTest here, matching AccessibilityTest.
  */
+@Tag("e2e")
 class CarouselOutfitCreationTest {
 
     private static final String BASE_URL = "http://localhost:8080";
