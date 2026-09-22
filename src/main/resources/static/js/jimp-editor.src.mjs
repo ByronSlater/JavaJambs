@@ -248,7 +248,7 @@ export function init(root) {
         setStatus('Uploading...')
         const formData = new FormData()
         formData.append('image', blob, 'jimp-edit.png')
-        formData.append('path', 'jimp-mockup')
+        formData.append('path', root.dataset.uploadPath || 'jimp-mockup')
 
         const response = await fetch('/img/upload', {
           method: 'POST',
@@ -260,7 +260,19 @@ export function init(root) {
           throw new Error(`Upload failed with status ${response.status}`)
         }
 
-        savedResult.innerHTML = await response.text()
+        const html = await response.text()
+        savedResult.innerHTML = html
+
+        const returnTo = root.dataset.returnTo
+        if (returnTo && /^\/(?!\/)/.test(returnTo)) {
+          const url = new DOMParser().parseFromString(html, 'text/html').querySelector('img')?.getAttribute('src')
+          if (url) {
+            setStatus('Saved. Returning...')
+            window.location.href = `${returnTo}?imageUrl=${encodeURIComponent(url)}`
+            return
+          }
+        }
+
         setStatus('Saved.')
       } catch (error) {
         console.error(error)

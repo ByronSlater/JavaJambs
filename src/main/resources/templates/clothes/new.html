@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{base.html}"
+>
+  <head>
+    <title>Add Clothing Item</title>
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <main class="flex justify-center">
+        <div class="w-full max-w-lg">
+          <div class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold">Add clothing item</h1>
+            <p class="mt-2 text-base-content/60">
+              Add a photo of the item and tag it so it shows up in your
+              carousel.
+            </p>
+          </div>
+
+          <div class="card bg-base-100 border border-base-300 shadow-sm">
+            <div class="card-body">
+              <form
+                th:action="@{/clothes}"
+                method="post"
+                enctype="multipart/form-data"
+                class="space-y-4"
+              >
+                <div th:if="${clothesError}" class="alert alert-error">
+                  <span th:text="${clothesError}"></span>
+                </div>
+
+                <div>
+                  <label for="name" class="label">
+                    <span class="label-text">Name</span>
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    name="name"
+                    required
+                    class="input input-bordered w-full"
+                    placeholder="Denim jacket"
+                  />
+                </div>
+
+                <div>
+                  <label for="type" class="label">
+                    <span class="label-text">Type</span>
+                  </label>
+                  <select
+                    id="type"
+                    name="type"
+                    required
+                    class="select select-bordered w-full"
+                  >
+                    <option value="" disabled selected>Choose a type</option>
+                    <option value="hat">Hat</option>
+                    <option value="top">Top</option>
+                    <option value="pant">Pant</option>
+                    <option value="shoe">Shoe</option>
+                  </select>
+                </div>
+
+                <div th:if="${imageUrl != null and !imageUrl.isEmpty()}">
+                  <label class="label">
+                    <span class="label-text">Photo</span>
+                  </label>
+                  <img
+                    th:src="@{${imageUrl}}"
+                    class="w-32 h-32 object-cover rounded-lg border border-base-300 mb-2"
+                  />
+                  <input type="hidden" name="imageUrl" th:value="${imageUrl}" />
+                  <p>
+                    <a th:href="@{/clothes/new}" class="link link-primary text-sm">
+                      Choose a different photo
+                    </a>
+                  </p>
+                </div>
+
+                <div th:if="${imageUrl == null or imageUrl.isEmpty()}">
+                  <label for="image" class="label">
+                    <span class="label-text">Photo</span>
+                  </label>
+                  <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept="image/*"
+                    class="file-input file-input-bordered w-full"
+                  />
+                  <p class="mt-2">
+                    <a
+                      th:href="@{/jimp(returnTo='/clothes/new',path='clothes')}"
+                      class="link link-primary text-sm"
+                    >
+                      Remove the background first
+                    </a>
+                  </p>
+                </div>
+
+                <div class="flex justify-end">
+                  <button type="submit" class="btn btn-primary">
+                    Add to wardrobe
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

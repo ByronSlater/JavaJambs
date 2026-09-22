@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{base.html}"
+>
+  <head>
+    <title>Your Outfits</title>
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <main class="flex justify-center">
+        <div class="w-full max-w-3xl">
+          <div class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold">Your Outfits</h1>
+
+            <p class="mt-2 text-base-content/60">
+              Outfits you've put together from your wardrobe.
+            </p>
+          </div>
+
+          <p
+            th:if="${outfits == null or #lists.isEmpty(outfits)}"
+            class="text-center text-base-content/50 py-8"
+          >
+            No outfits yet.
+            <a th:href="@{/carousel}" class="link link-primary">Build one</a>.
+          </p>
+
+          <div
+            th:if="${outfits != null and !#lists.isEmpty(outfits)}"
+            class="grid grid-cols-2 md:grid-cols-3 gap-4"
+          >
+            <div
+              th:each="outfit : ${outfits}"
+              class="card bg-base-100 border border-base-300 shadow-sm"
+            >
+              <div class="card-body">
+                <h2 class="card-title" th:text="${outfit.outfitName}">
+                  Outfit
+                </h2>
+
+                <div class="flex flex-wrap gap-2">
+                  <img
+                    th:each="item : ${outfit.clothes}"
+                    th:if="${item.imageUrl != null}"
+                    th:src="@{${item.imageUrl}}"
+                    class="w-16 h-16 object-cover rounded-lg"
+                  />
+                </div>
+
+                <p
+                  th:if="${outfit.clothes == null or outfit.clothes.isEmpty()}"
+                  class="text-sm text-base-content/50"
+                >
+                  No items in this outfit.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

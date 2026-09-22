@@ -43,37 +43,42 @@ public class ClothesController {
         return "clothes/index";
     }
 
-    @GetMapping("/clothes/new") 
+    @GetMapping("/clothes/new")
     public String newClothingItemPage(
-        @AuthenticationPrincipal User user, 
+        @AuthenticationPrincipal User user,
+        @RequestParam(required = false) String imageUrl,
         Model model) {
 
           if (user == null) {
             return "redirect:/login";
         }
 
+        model.addAttribute("imageUrl", imageUrl);
+
         return "clothes/new";
     }
 
     @PostMapping("/clothes")
     public String createClothingItem(
-        @AuthenticationPrincipal User user, 
-        @RequestParam String name, 
-        @RequestParam(required = false) MultipartFile image, 
+        @AuthenticationPrincipal User user,
+        @RequestParam String name,
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) MultipartFile image,
+        @RequestParam(required = false) String imageUrl,
         Model model) {
 
             if (user == null) {
             return "redirect:/login";
     }
         try {
-            clothesService.addClothingItem(user, name, image);
+            clothesService.addClothingItem(user, name, type, image, imageUrl);
         } catch (IOException e) {
             model.addAttribute("clothesError", "Sorry! Couldn't upload that photo. Please try again.");
             return "clothes/new";
         }
 
         return "redirect:/clothes";
-    }    
+    }
 
         @GetMapping("/clothes/{id}/edit")
         public String editClothingItempage(

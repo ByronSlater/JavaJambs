@@ -12,11 +12,70 @@
 :root {
   --carousel__smaller: 0;
   --carousel__faded: 0;
+  --slide-width: 200px;
+  --slide-height: 250px;
+
+  /* The radius of the wheel.
+         Formula approximation: (slide-width / 2) / tan(360 / number of items / 2)
+         For 8 items of 200px width, roughly 240px creates a seamless cylinder. */
+  --wheel-radius: 242px;
+}
+
+.carousel__viewport {
+  width: 100%;
+  background: #444;
+}
+
+.carousel__track {
+  margin: 0 auto;
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 50px;
+  position: relative;
+  width: 200px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 5px 130px;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.carousel__item {
+  display: block;
+  flex: 0 0 50px;
+  width: var(--slide-width);
+  height: 100%;
+  position: relative;
+  scroll-snap-align: center;
+  transform-style: preserve-3d;
+  animation: roll-horizontal linear both;
+  animation-timeline: view(inline);
+}
+
+@keyframes roll-horizontal {
+  0% {
+    transform:
+      translateZ(100px) scale(0.3) rotateY(-15deg);
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  50% {
+    transform: rotateX(0deg) translateZ(300px) scale(1.3);
+    opacity: 1;
+    z-index: 1;
+  }
+
+  100% {
+    transform: translateZ(100px) scale(0.3) rotateY(15deg);
+    z-index: 0;
+    opacity: 0.3;
+  }
 }
 
 @keyframes shrink-and-grow {
   0% {
-    transform: scale(var(--carousel__smaller)) translateX(500px) translateZ(-800px) rotateY(45deg);
+    transform: rotateY(-90deg);
     opacity: var(--carousel__faded);
   }
 
@@ -26,19 +85,7 @@
   }
 
   100% {
-    transform: scale(var(--carousel__smaller)) translateX(-500px) translateZ(-800px) rotateY(-45deg);
-    opacity: var(--carousel__faded)
+    transform: rotateY(90deg);
+    opacity: var(--carousel__faded);
   }
-}
-
-.carousel__cher {
-  perspective: 1000px;
-  perspective-origin: center;
-}
-
-.shrinky {
-  view-timeline: --item-visible inline;
-
-  animation: shrink-and-grow linear both;
-  animation-timeline: --item-visible;
 }

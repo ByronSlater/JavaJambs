@@ -138,12 +138,22 @@ class ClothesControllerTest {
     }
 
     @Test
+    void newClothingItemPage_withImageUrlParam_putsItOnTheModel() throws Exception {
+        authenticatedUser();
+
+        mockMvc.perform(get("/clothes/new").param("imageUrl", "/img/clothes/edited.png"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("clothes/new"))
+                .andExpect(model().attribute("imageUrl", "/img/clothes/edited.png"));
+    }
+
+    @Test
     void createClothingItem_redirectsToLoginWhenNotAuthenticated() throws Exception {
         mockMvc.perform(post("/clothes").param("name", "Denim jacket"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"));
 
-        verify(clothesService, never()).addClothingItem(any(), any(), any());
+        verify(clothesService, never()).addClothingItem(any(), any(), any(), any(), any());
     }
 
     @Test
@@ -154,7 +164,7 @@ class ClothesControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/clothes"));
 
-        verify(clothesService).addClothingItem(any(User.class), eq("Denim jacket"), isNull());
+        verify(clothesService).addClothingItem(any(User.class), eq("Denim jacket"), isNull(), isNull(), isNull());
     }
 
     @Test
@@ -172,13 +182,29 @@ class ClothesControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/clothes"));
 
-        verify(clothesService).addClothingItem(any(User.class), eq("Denim jacket"), eq((MultipartFile) image));
+        verify(clothesService).addClothingItem(
+                any(User.class), eq("Denim jacket"), isNull(), eq((MultipartFile) image), isNull());
+    }
+
+    @Test
+    void createClothingItem_withTypeAndImageUrl_passesThemThroughToTheService() throws Exception {
+        authenticatedUser();
+
+        mockMvc.perform(post("/clothes")
+                        .param("name", "Denim jacket")
+                        .param("type", "top")
+                        .param("imageUrl", "/img/clothes/edited.png"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/clothes"));
+
+        verify(clothesService).addClothingItem(
+                any(User.class), eq("Denim jacket"), eq("top"), isNull(), eq("/img/clothes/edited.png"));
     }
 
     @Test
     void createClothingItem_whenServiceRejectsTheUpload_returnsNewViewWithAnError() throws Exception {
         authenticatedUser();
-        when(clothesService.addClothingItem(any(), any(), any()))
+        when(clothesService.addClothingItem(any(), any(), any(), any(), any()))
                 .thenThrow(new IOException("Clothing photo must be an image"));
 
         mockMvc.perform(post("/clothes").param("name", "Denim jacket"))
