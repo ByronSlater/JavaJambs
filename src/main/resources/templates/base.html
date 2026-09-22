@@ -18,18 +18,18 @@
     th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'
   >
     <div id="main" class="bg-base-100 h-dvh flex flex-col overflow-hidden">
-      <div th:replace="~{fragments/auth-header.html}"></div>
-
       <main
         th:with="loggedIn=${#authorization.expression('isAuthenticated()')}"
         class="grid grid-cols-[1fr] flex-1 min-h-0"
         th:classappend="${loggedIn} ? 'md:grid-cols-[auto_1fr]' : ''"
       >
         <div
-          class="col-start-1 pt-8 px-8 pb-20 md:pb-6 h-full overflow-y-scroll"
+          class="col-start-1 px-8 pb-20 md:pb-6 h-full overflow-y-scroll"
           th:classappend="${loggedIn} ? 'md:col-start-2' : ''"
-          layout:fragment="content"
-        ></div>
+        >
+          <div th:replace="~{fragments/auth-header.html}"></div>
+          <div layout:fragment="content"></div>
+        </div>
 
         <footer class="md:row-start-1 md:col-start-1" th:if="${loggedIn}">
           <div th:replace="~{fragments/auth-footer.html}"></div>
