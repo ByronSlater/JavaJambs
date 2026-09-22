@@ -44,6 +44,7 @@
   position: relative;
   width: 200px;
   overflow-x: auto;
+  overflow-y: hidden;
 
   &::-webkit-scrollbar {
     display: none;
@@ -59,7 +60,8 @@
 
 .carousel__item {
   display: block;
-  flex: 0 0 50px;
+  flex: 0 0 100px;
+  overflow-y: hidden;
   width: var(--slide-width);
   height: 100%;
   position: relative;
