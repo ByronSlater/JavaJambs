@@ -40,7 +40,10 @@
   margin: 0 auto;
   display: flex;
   flex-flow: row nowrap;
-  gap: 50px;
+  gap: 25px;
+  border: solid #222;
+  border-width: 0 10px;
+  background: #888;
   position: relative;
   width: 200px;
   overflow-x: auto;
@@ -56,6 +59,7 @@
   padding: 5px 130px;
   transform-style: preserve-3d;
   backface-visibility: hidden;
+  height: 24vh;
 }
 
 .carousel__item {
@@ -64,11 +68,17 @@
   overflow-y: hidden;
   width: var(--slide-width);
   height: 100%;
+  width: fit-content;
   position: relative;
   scroll-snap-align: center;
   transform-style: preserve-3d;
   animation: roll-horizontal linear both;
   animation-timeline: view(inline);
+
+  >img {
+    height: 100%;
+    width: auto;
+  }
 }
 
 @keyframes roll-horizontal {
